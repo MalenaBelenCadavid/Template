@@ -28,5 +28,11 @@ namespace Template.Controllers
             await _serviceTorneo.CargarResultado(idPartido, golesLocal, golesVis, ct);
             return NoContent();
         }
+        [HttpGet("ObtenerCuadro")]
+        public async Task<IActionResult> ObtenerCuadroTorneo(int idTorneo, CancellationToken ct)
+        {
+            var cuadro = await _serviceTorneo.ObtenerCuadroTorneo(idTorneo, ct);
+            return Ok(cuadro);
+        }
     }
 }
