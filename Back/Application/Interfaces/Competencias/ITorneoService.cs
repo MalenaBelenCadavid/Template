@@ -10,6 +10,8 @@ namespace Application.Interfaces.Competencias
           Task GenerarFixture(int idTorneo, CancellationToken ct = default);
           Task AgregarPartidos(List<Partido> fixture, CancellationToken ct = default);
           Task CargarResultado(int IdPartido, int GolesLocal, int GolesVis, CancellationToken ct = default);
+          Task DescalificarEquipo(int idEquipo, CancellationToken ct = default);
+        Task<ObtenerCuadroResponse> ObtenerCuadroTorneo(int idTorneo, CancellationToken ct = default);
     }
 
 }

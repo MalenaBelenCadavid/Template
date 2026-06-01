@@ -5,6 +5,7 @@ using Application.DTOs.Response.Equipos;
 using Application.DTOs.Response.Partidos;
 using Application.Interfaces.Competencias;
 using Domain.Entities;
+using System.Numerics;
 
 namespace Application.UseCases
 {
@@ -26,6 +27,7 @@ namespace Application.UseCases
                 "Torneo" => new Torneo(),
                 _ => throw new ArgumentException("Formato invalido")
             };
+            if (request.tipo== "Torneo") { if (!BitOperations.IsPow2((uint)request.cupos)) throw new ArgumentException("El numero de cupos debe ser una potencia de 2"); }
 
             competencia.Nombre = request.nombre;
             competencia.Descripcion = request.descripcion;
@@ -112,7 +114,8 @@ namespace Application.UseCases
 
             var equipo = new Equipo
             {
-                Nombre = request.nombre
+                Nombre = request.nombre,
+                Estado= request.estado
             };
 
             await _competenciaCommand.AgregarEquipo(equipo, idCompetencia, ct);

@@ -2,6 +2,9 @@
 using Domain.Entities;
 using Application.DTOs.Request.Competencias;
 using Application.DTOs.Response.Competencias;
+using Application.DTOs.Response.Partidos;
+using Application.DTOs.Response.Equipos;
+using Application.Interfaces.Equipos;
 using Application.Interfaces.Partidos;
 using Application.Exceptions;
 using Application.Interfaces.Equipos;
@@ -10,7 +13,7 @@ using Application.Interfaces.Equipos;
 namespace Application.UseCases
 {
 
-    public class TorneoService:CompetenciaService,ITorneoService
+    public class TorneoService : CompetenciaService, ITorneoService
     {
         private readonly IPartidoCommand _partidoCommand;
         private readonly IPartidoQuery _partidoQuery;
@@ -101,8 +104,120 @@ namespace Application.UseCases
             partido.GolesLocal = GolesLocal;
             partido.GolesVis = GolesVis;
             partido.Estado = "Finalizado";
+            if (GolesLocal==GolesVis) { throw new InvalidOperationException("No se permiten empates en el torneo."); }
+            if (partido.SigPartido != null && partido.SigPartido.Estado == "Programado")
+            {
+                if (GolesLocal > GolesVis)
+                {
+                    if (partido.SigPartido.IdEquipoLocal is null)
+                    {
+                        partido.SigPartido.IdEquipoLocal = partido.IdEquipoLocal ?? partido.SigPartido.IdEquipoLocal;
+                        await DescalificarEquipo(partido.IdEquipoVis.Value, ct);
+                    }
+                    else
+                    {
+                        partido.SigPartido.IdEquipoVis = partido.IdEquipoLocal ?? partido.SigPartido.IdEquipoVis;
+                        await DescalificarEquipo(partido.IdEquipoVis.Value, ct);
+                    }
+
+                }
+                else
+                {
+                    if (partido.SigPartido.IdEquipoLocal is null)
+                    {
+                        partido.SigPartido.IdEquipoLocal = partido.IdEquipoVis ?? partido.SigPartido.IdEquipoVis;
+                        await DescalificarEquipo(partido.IdEquipoLocal.Value, ct);
+                    }
+                    else
+                    {
+                        partido.SigPartido.IdEquipoVis = partido.IdEquipoVis ?? partido.SigPartido.IdEquipoVis;
+                        await DescalificarEquipo(partido.IdEquipoLocal.Value, ct);
+                    }
+
+                }
+            }
 
             await _partidoCommand.ModificarPartido(partido, ct);
+            await _partidoCommand.ModificarPartido(partido.SigPartido, ct);
+        }
+        public async Task DescalificarEquipo(int idEquipo, CancellationToken ct = default)
+        {
+            var equipo = await _equipoQuery.ObtenerEquipoPorId(idEquipo, ct);
+            if (equipo is null) throw new KeyNotFoundException($"No se encontro equipo con id: {idEquipo}");
+            if (equipo.Estado)
+            {
+                equipo.Estado = false;
+                await _equipoCommand.ModificarEquipo(equipo, ct);
+            }
+        }
+        public async Task<ObtenerCuadroResponse> ObtenerCuadroTorneo(
+            int idTorneo,
+            CancellationToken ct = default)
+        {
+            var torneo = await _competenciaQuery
+                .ObtenerCompetenciaPorId(idTorneo, ct);
+
+            if (torneo is null)
+                throw new KeyNotFoundException(
+                    $"No se encontró torneo con id {idTorneo}");
+
+            if (torneo is not Torneo)
+                throw new InvalidOperationException(
+                    $"La competencia {idTorneo} no es un torneo");
+
+            var partidos = torneo.Partidos.ToList();
+
+            var resultado = new ObtenerCuadroResponse
+            {
+                Fases = new List<FaseTorneoResponse>()
+            };
+
+            int cantidadPartidos = torneo.Cupos / 2;
+
+            while (cantidadPartidos > 0)
+            {
+                var ronda = partidos
+                    .Take(cantidadPartidos)
+                    .ToList();
+
+                resultado.Fases.Add(new FaseTorneoResponse
+                {
+                    NombreFase = ObtenerNombreFase(cantidadPartidos),
+
+                    Partidos = ronda.Select(p => new PartidoResponse
+                    {
+                        IdPartido = p.IdPartido,
+                        IdEquipoLocal = p.IdEquipoLocal,
+                        IdEquipoVis = p.IdEquipoVis,
+                        Estado = p.Estado,
+                        GolesLocal = p.GolesLocal,
+                        GolesVis = p.GolesVis,
+                        HoraInicio = p.HoraInicio,
+                        HoraFin = p.HoraFin
+                    }).ToList()
+                });
+
+                partidos = partidos
+                    .Skip(cantidadPartidos)
+                    .ToList();
+
+                cantidadPartidos /= 2;
+            }
+
+            return resultado;
+        }
+
+        private string ObtenerNombreFase(int cantidadPartidos)
+        {
+            return cantidadPartidos switch
+            {
+                1 => "Final",
+                2 => "Semifinal",
+                4 => "Cuartos de Final",
+                8 => "Octavos de Final",
+                16 => "Dieciseisavos de Final",
+                _ => $"Ronda de {cantidadPartidos * 2}"
+            };
         }
     }
-}
+    }

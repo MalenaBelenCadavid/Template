@@ -49,6 +49,7 @@ namespace Application.UseCases
             equipo.Victorias = request.victorias >= 0 ? request.victorias : equipo.Victorias;
             equipo.Derrotas = request.derrotas >= 0 ? request.derrotas : equipo.Derrotas;
             equipo.IdCompetencia = request.idCompetencia;
+            equipo.Estado = request.estado;
 
             await _equipoCommand.ModificarEquipo(equipo, ct);
         }
@@ -65,7 +66,8 @@ namespace Application.UseCases
                 id = equipo.IdEquipo,
                 nombre = equipo.Nombre,
                 victorias = equipo.Victorias,
-                derrotas = equipo.Derrotas
+                derrotas = equipo.Derrotas,
+                estado = equipo.Estado
             };
 
         }
