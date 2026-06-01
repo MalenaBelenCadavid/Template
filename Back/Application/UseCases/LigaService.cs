@@ -124,6 +124,20 @@ namespace Application.UseCases
                     .ToList();
 
         }
+        public async Task EliminarFixture(int idLiga, CancellationToken ct = default)
+        {
+            var competencia = await _competenciaQuery.ObtenerCompetenciaPorId(idLiga, ct);
+            if (competencia is null) throw new KeyNotFoundException($"No se encontro competencias con id: {idLiga}");
+            if (competencia.Partidos.Count() == 0)
+            {
+                throw new InvalidOperationException($"La competencia {competencia.Nombre} no tiene partidos para eliminar.");
+            }
+            await _competenciaCommand.EliminarPartidos(int idLiga, ct);
 
-    }
+        }
+        public async Task RehacerFixture(int idLiga, CancellationToken ct = default)
+        {
+            await EliminarFixture(idLiga, ct);
+            await GenerarFixture(idLiga, ct);
+        }
 }
