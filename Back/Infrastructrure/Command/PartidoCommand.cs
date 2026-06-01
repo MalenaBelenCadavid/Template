@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces.Partidos;
 using Domain.Entities;
 using Infrastructure.Persistence;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Command
 {
@@ -21,8 +21,18 @@ namespace Infrastructure.Command
         }
         public async Task ModificarPartido(Partido partido, CancellationToken ct = default)
         {
-            _context.Partidos.Update(partido);
-            await _context.SaveChangesAsync(ct);
+            await _context.Partidos
+        .Where(p => p.IdPartido == partido.IdPartido)
+        .ExecuteUpdateAsync(s => s
+            .SetProperty(p => p.IdSigPartido, partido.IdSigPartido)
+            .SetProperty(p => p.IdEquipoLocal, partido.IdEquipoLocal)
+            .SetProperty(p => p.IdEquipoVis, partido.IdEquipoVis)
+            .SetProperty(p => p.GolesLocal, partido.GolesLocal)
+            .SetProperty(p => p.GolesVis, partido.GolesVis)
+            .SetProperty(p => p.Estado, partido.Estado)
+            .SetProperty(p => p.HoraInicio, partido.HoraInicio)
+            .SetProperty(p => p.HoraFin, partido.HoraFin),
+        ct);
         }
         public async Task EliminarPartido(Partido partido, CancellationToken ct = default)
         {
@@ -34,6 +44,13 @@ namespace Infrastructure.Command
             _context.Partidos.AddRange(fixture);
             await _context.SaveChangesAsync(ct);
             return fixture;
+        }
+        public async Task ActualizarSigPartido(int idPartido, int idSigPartido, CancellationToken ct = default)
+        {
+            await _context.Partidos
+                .Where(p => p.IdPartido == idPartido)
+                .ExecuteUpdateAsync(s => s
+                    .SetProperty(p => p.IdSigPartido, idSigPartido), ct);
         }
     }
 }
