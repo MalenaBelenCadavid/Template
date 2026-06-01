@@ -1,0 +1,139 @@
+.entre-asistencia-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  background-color: #0a0a0a;
+}
+
+.entre-asistencia-row {
+  background-color: #111111;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.2s;
+}
+
+.entre-asistencia-row:hover {
+  border-color: #1f1f1f;
+}
+
+.entre-asistencia-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.entre-asistencia-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #1a1a1a;
+  border: 1px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #00ff88;
+}
+
+.entre-asistencia-dni {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e8e8e8;
+}
+
+.entre-asistencia-sub {
+  font-size: 12px;
+  color: #555;
+  margin-top: 2px;
+}
+
+.entre-asistencia-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.entre-estado {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.entre-estado.presente {
+  background-color: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+  border: 1px solid #00ff88;
+}
+
+.entre-estado.ausente {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid #7f1d1d;
+}
+
+.entre-btn-eliminar {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #7f1d1d;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.entre-btn-eliminar:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+}
+
+.entre-btn-eliminar:active {
+  transform: scale(0.97);
+}
+
+.entre-btn-presente {
+  background-color: transparent;
+  color: #00ff88;
+  border: 1px solid #00ff88;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.entre-btn-presente:hover {
+  background-color: rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.entre-btn-ausente {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #7f1d1d;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.entre-btn-ausente:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+}
+
+.entre-btn-presente:active,
+.entre-btn-ausente:active {
+  transform: scale(0.97);
+}

@@ -48,10 +48,10 @@ namespace Template.Controllers
 
         }
         [HttpGet("clases/{profesorDni}")]
-        public async Task<IActionResult> VerClasePorProfesor(int profesorId)
+        public async Task<IActionResult> VerClasePorProfesor(int profesorDni)
         {
 
-            var response = await _service.VerClasesPorProfesorDni(profesorId);
+            var response = await _service.VerClasesPorProfesorDni(profesorDni);
             return Ok(response);
 
         }

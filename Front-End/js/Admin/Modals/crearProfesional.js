@@ -19,9 +19,7 @@ export function abrirModalCrearProfesional(tipo) {
 
         <div>
 
-          <span class="modal-badge">
-            ${tipo}
-          </span>
+
 
           <h2 class="modal-title">
             Crear ${tipo}
@@ -180,8 +178,6 @@ export function abrirModalCrearProfesional(tipo) {
   modal.querySelector(".modal-close")
     .addEventListener("click", cerrarModal);
 
-  modal.querySelector("#btn-cancelar")
-    .addEventListener("click", cerrarModal);
 
   modal.querySelector("#form-crear-profesional")
     .addEventListener("submit", async (e) => {

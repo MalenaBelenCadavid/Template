@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Application.DTOs.Request.Equipos
 {
 
     public class CrearEquipoRequest
     {
-            public string nombre { get; set; }
+        public string nombre { get; set; }
+        public int CompetenciaId { get; set; }
+        public int ClienteDni { get; set; }
     }
 }

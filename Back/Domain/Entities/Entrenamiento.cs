@@ -14,5 +14,6 @@
 
         //Relación
         public Entrenador Entrenador { get; set; }
+        public IEnumerable<Asistencia>? Asistencias { get; set; }
     }
 }

@@ -7,23 +7,35 @@ using Application.Interfaces.Equipos;
 using Application.DTOs.Request.Equipos;
 using Application.DTOs.Response.Equipos;
 using Domain.Entities;
+using Application.Interfaces.Cliente;
+using Application.Exceptions;
+using Application.Interfaces.Competencias;
 
 namespace Application.UseCases
 {
-    public class EquipoService:IEquipoService
+    public class EquipoService : IEquipoService
     {
         private readonly IEquipoCommand _equipoCommand;
         private readonly IEquipoQuery _equipoQuery;
-        public EquipoService(IEquipoCommand equipoCommand, IEquipoQuery equipoQuery)
+        private readonly IClienteQuery _clienteQuery;
+        private readonly ICompetenciaQuery _competenciaQuery;
+        public EquipoService(IEquipoCommand equipoCommand, IEquipoQuery equipoQuery, IClienteQuery clienteQuery, ICompetenciaQuery competenciaQuery)
         {
             _equipoCommand = equipoCommand;
             _equipoQuery = equipoQuery;
+            _clienteQuery = clienteQuery;
+            _competenciaQuery = competenciaQuery;
         }
         public async Task<int> CrearEquipo(CrearEquipoRequest request, CancellationToken ct = default)
         {
+            var cliente = await _clienteQuery.ConsultarCliente(request.ClienteDni) ?? throw new ExceptionNotFound("Cliente no encontrado");
+            var competencia = await _competenciaQuery.ObtenerCompetenciaPorId(request.CompetenciaId) ?? throw new ExceptionNotFound("Competencia no encontrada");
             var equipo = new Equipo
             {
-                Nombre = request.nombre
+                Nombre = request.nombre,
+                IdCompetencia=request.CompetenciaId,
+                DniCliente=request.ClienteDni,
+                Estado=true,
             };
             await _equipoCommand.CrearEquipo(equipo, ct);
             return equipo.IdEquipo;

@@ -15,6 +15,7 @@ namespace Domain.Entities
 
         //Relación
         public Profesor Profesor { get; set; }
+        public IEnumerable<Asistencia>? Asistencias { get; set; }
 
         
     }

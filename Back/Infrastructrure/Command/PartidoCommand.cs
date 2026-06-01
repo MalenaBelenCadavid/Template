@@ -29,5 +29,11 @@ namespace Infrastructure.Command
             _context.Partidos.Remove(partido);
             await _context.SaveChangesAsync(ct);
         }
+        public async Task<IEnumerable<Partido>> AgregarPartidos(List<Partido> fixture, CancellationToken ct = default)
+        {
+            _context.Partidos.AddRange(fixture);
+            await _context.SaveChangesAsync(ct);
+            return fixture;
+        }
     }
 }

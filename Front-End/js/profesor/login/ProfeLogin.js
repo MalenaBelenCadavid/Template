@@ -1,26 +1,31 @@
-import {postData} from "../../Global/ApiServices.js"
-export async function ProfeLogin() {
-    const correo = document.getElementById("email").value;
-    const psw = document.getElementById("password").value;
-    const endpointUrl = "Profesionales/login/profesor"; // Endpoint específico para Profesor
+import { postData } from "../../Global/ApiServices.js";
 
-    const body = { 
-        correo: correo,
-        password: psw
-    };
+const SESSION_KEYS = ["dni", "nombre", "logged", "Adminlogged", "Profesorlogged", "Entrenadorlogged"];
+const REDIRECT_DELAY = 2500;
+
+export async function ProfesorLogin() {
+    const correo = document.getElementById("email").value.trim();
+    const psw = document.getElementById("password").value;
+    const endpointUrl = "Profesionales/login/profesor";
+
+    if (!correo || !psw) {
+        showLoginError(new Error("Por favor completá todos los campos."));
+        return;
+    }
+
+    const body = { correo, password: psw };
 
     try {
         const response = await postData(endpointUrl, body);
 
-        // Limpieza de sesiones previas
-        const keysToRemove = ["dni", "nombre", "logged", "Adminlogged", "Profesorlogged", "Entrenadorlogged"];
-        keysToRemove.forEach(key => localStorage.removeItem(key));
+        // Clear previous sessions
+        SESSION_KEYS.forEach(key => localStorage.removeItem(key));
 
-        // Persistencia de datos según el modelo UML (Profesor)
+        // Persist session data
         localStorage.setItem("dni", response.dni);
         localStorage.setItem("nombre", response.nombre);
-        localStorage.setItem("Profesorlogged", "true"); 
-        localStorage.setItem("logged", "true"); 
+        localStorage.setItem("logged", "true");
+        
 
         Swal.fire({
             toast: true,
@@ -28,7 +33,7 @@ export async function ProfeLogin() {
             icon: "success",
             title: "Sesión de Profesor iniciada",
             showConfirmButton: false,
-            timer: 2500,
+            timer: REDIRECT_DELAY,
             timerProgressBar: true,
             customClass: {
                 popup: "toast-golahora toast-popup-success",
@@ -37,12 +42,13 @@ export async function ProfeLogin() {
         });
 
         setTimeout(() => {
-            window.location.href = 'profesor.html'; // Redirección a su propio panel
-        }, 2500);
+            window.location.href = "profesor.html";
+        }, REDIRECT_DELAY);
 
     } catch (error) {
         showLoginError(error);
     }
 }
-// Vinculación global para el HTML
-window.ProfeLogin=ProfeLogin;
+
+// Global binding for HTML
+window.ProfesorLogin = ProfesorLogin;

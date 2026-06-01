@@ -48,7 +48,7 @@ namespace Template.Controllers
             await _service.EliminarCompetencia(CompetenciaId);
             return NoContent();
         }
-        [HttpGet]
+        [HttpGet("Competencias")]
         public async Task<IActionResult> ObtenerTodasLasCompetencias()
         {
             var result = await _service.ObtenerTodasLasCompetencias();

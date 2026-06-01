@@ -272,6 +272,11 @@ namespace Infrastructure.Persistence
                 entity.HasOne(e => e.Competencia)
                 .WithMany(c => c.Equipos)
                 .HasForeignKey(e => e.IdCompetencia);
+
+                entity.HasOne(e => e.Cliente)
+                    .WithMany(c => c.Equipos)
+                    .HasForeignKey(e => e.DniCliente);
+            
             });
 
             // PARTIDO
@@ -473,7 +478,26 @@ namespace Infrastructure.Persistence
 
                 entity.Property(a => a.IdAsistencia)
                     .ValueGeneratedOnAdd();
+
+                entity.HasOne(a => a.Cliente)
+                .WithMany(c => c.Asistencias)
+                .HasForeignKey(a => a.DniCliente)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(a=>a.Clase)
+                .WithMany(c=>c.Asistencias)
+                .HasForeignKey(a=>a.IdClase)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(a => a.Entrenamiento)
+                .WithMany(e => e.Asistencias)
+                .HasForeignKey(a => a.IdEntrenamiento)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             });
+
+
 
             // REPORTE
 

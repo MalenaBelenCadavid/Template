@@ -321,8 +321,8 @@ namespace Application.UseCases
                 {
                     IdAsistencia = asistenciaCreada.IdAsistencia,
                     DniCliente = asistenciaCreada.DniCliente,
-                    IdClase = asistenciaCreada.IdClase,
-                    Presente = asistenciaCreada.Presente,
+                    IdClase = (int)asistenciaCreada.IdClase,
+                    Presente = (bool)asistenciaCreada.Presente,
                 });
             }
 

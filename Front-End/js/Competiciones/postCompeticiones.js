@@ -2,7 +2,7 @@ import { postData } from "../Global/ApiServices.js";
 
 export async function crearCompeticion(tipo,nombre,descripcion,cupo,precio)
 {
-    const endpointUrl = "Competencia"
+    const endpointUrl = "Competencia/CrearCompetencias"
     const body = 
     {   
        tipo:tipo,

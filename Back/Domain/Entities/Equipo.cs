@@ -10,7 +10,9 @@ namespace Domain.Entities
         public int Derrotas { get; set; }
         public IEnumerable<Partido>Partidos { get; set; }
         public bool Estado { get; set; }
+        public int DniCliente { get; set; }
 
         public Competencia Competencia { get; set; } 
+        public Cliente Cliente { get; set; }
     }
 }

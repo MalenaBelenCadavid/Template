@@ -22,6 +22,9 @@ import { crearClase } from "./Modals/crearClases.js";
 import { eliminarClase } from "./eliminarClase.js";
 import { eliminarCancha } from "./eliminarCancha.js";
 import { eliminarProfesional } from "./eliminarProfesional.js";
+import { renderAccionesCobro } from "./cobrosBtns.js";
+import { renderAccionesRecibo } from "./recibosBtns.js";
+import { editarCompetencia } from "./Modals/editarCompetencia.js";
 
 
 
@@ -348,39 +351,61 @@ botones.forEach((boton, index) => {
 
 }
 
- if(seccionAct == "Competencias")
- {
-    const container = document.querySelector("#competiciones");
+if (seccionAct == "Competencias") {
 
-    container.innerHTML = `
+  const container = document.querySelector("#competiciones");
 
-      <div class="section-header">
+  container.innerHTML = `
+    <div class="section-header">
+      <button class="btn-primary" id="btn-crear-competencia">
+        + Crear competencia
+      </button>
+    </div>
 
-        <button 
-          class="btn-primary"
-          id="btn-crear-competencia"
-        >
-          + Crear competencia
-        </button>
+    <div id="competitions-container"></div>
+  `;
 
-      </div>
+  const competiciones = await getCompeticiones();
 
-      <div id="competitions-container"></div>
+  // estado global (para eventos)
+  window.competicionesGlobal = competiciones;
 
-    `;
+  const listContainer = container.querySelector("#competitions-container");
 
-    const competiciones = await getCompeticiones();
+  listContainer.innerHTML = RenderCompetitionAdminCards(competiciones);
 
-    document.querySelector("#competitions-container").innerHTML =
-      RenderCompetitionAdminCards(competiciones);
+  // =========================
+  // CREAR COMPETENCIA
+  // =========================
+  const btnCrear = container.querySelector("#btn-crear-competencia");
 
-    container
-      .querySelector("#btn-crear-competencia")
-      .addEventListener("click", () => {
-        crearCompetencia();
+  if (btnCrear) {
+    btnCrear.addEventListener("click", crearCompetencia);
+  }
 
-      });
- }
+  if (!window.eventEditarCompetencia) {
+
+  document.addEventListener("click", (e) => {
+
+    const btn = e.target.closest(".admin-btn-edit");
+    if (!btn) return;
+
+    const id = Number(btn.dataset.id);
+
+    const competencia = window.competicionesGlobal?.find(
+      c => c.competenciaId === id
+    );
+
+    if (!competencia) return;
+
+    editarCompetencia(competencia);
+  });
+
+  window.eventEditarCompetencia = true;
+}
+
+
+}
 
   if(seccionAct =="Clases")
   {
@@ -543,6 +568,21 @@ botones.forEach((boton, index) => {
   
   }
 
+  if(seccionAct == "Cobros y recibos")
+    {
+      const container = document.querySelector("#cobrosYrecibos");
+       if (!container) {
+        console.error("No existe el container #cobrosYrecibos");
+        return;
+      }
+  
+       if(seccionAct == "Descuentos")
+       {
+         window.location.href = "./descuentos.html";
+       }
+
+      container.innerHTML = renderAccionesCobro() + renderAccionesRecibo();
+    }
 
 
 

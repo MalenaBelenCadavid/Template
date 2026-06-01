@@ -1,0 +1,123 @@
+/* Grid contenedor → lista vertical */
+.admi-asistencia-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background-color: #0a0a0a;
+}
+
+/* Card → fila horizontal */
+.admi-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #111111;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admi-card:hover {
+  border-color: #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+}
+
+/* Lado izquierdo — nombre + info */
+.admi-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.admi-card-title {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  min-width: 150px;
+}
+
+/* Info en línea */
+.admi-card-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.admi-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.admi-info-label {
+  color: #555555;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admi-info-value {
+  color: #cccccc;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Botones a la derecha */
+.entre-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.admin-btn {
+  background-color: transparent;
+  border: 1px solid #00ff88;
+  color: #00ff88;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.admin-btn:hover {
+  background-color: #00ff88;
+  color: #0a0a0a;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.admin-btn:active {
+  transform: scale(0.97);
+}
+
+/* Botón Eliminar — rojo */
+.admin-btn.Eliminar {
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+.admin-btn.Eliminar:hover {
+  background-color: #ff4444;
+  color: #0a0a0a;
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+}
+
+/* Botón Ausente — amarillo */
+.admin-btn.Ausente {
+  border-color: #ffcc00;
+  color: #ffcc00;
+}
+
+.admin-btn.Ausente:hover {
+  background-color: #ffcc00;
+  color: #0a0a0a;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
+}

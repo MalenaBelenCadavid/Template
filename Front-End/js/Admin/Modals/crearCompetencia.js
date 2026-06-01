@@ -105,12 +105,7 @@ export function crearCompetencia() {
 
         <div class="modal-actions">
 
-          <button
-            type="button"
-            class="btn-cancel"
-          >
-            Cancelar
-          </button>
+         
 
           <button
             type="submit"
@@ -143,9 +138,7 @@ export function crearCompetencia() {
     .querySelector(".modal-close")
     .addEventListener("click", cerrarModal);
 
-  modal
-    .querySelector(".btn-cancel")
-    .addEventListener("click", cerrarModal);
+
 
   modal.addEventListener("click", (e) => {
 

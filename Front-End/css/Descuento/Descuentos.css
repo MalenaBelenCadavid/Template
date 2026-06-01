@@ -1,0 +1,252 @@
+/* descuentos.css - estilos específicos de la página de descuentos */
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3rem;
+  background: rgba(13,13,13,0.95);
+  border-bottom: 1px solid var(--gris-claro);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--verde);
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+
+.logo span { color: var(--texto); }
+
+nav ul { list-style: none; display: flex; gap: 2rem; }
+
+nav ul a {
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav ul a:hover, nav ul a.active { color: var(--verde); }
+
+nav .btn {
+  border: 1.5px solid var(--verde);
+  color: var(--verde);
+  background: transparent;
+}
+
+nav .btn:hover { background: var(--verde); color: var(--negro); }
+
+/* CONTAINER */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 2rem; animation: fadeDown 0.4s ease both; }
+
+.page-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.page-header h1 span { color: var(--verde); }
+.page-header p { color: var(--texto-suave); margin-top: 0.3rem; }
+
+/* GRID */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+}
+
+/* PANEL */
+.panel {
+  background: var(--gris);
+  border: 1px solid var(--gris-claro);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  animation: fadeDown 0.4s ease 0.1s both;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--gris-claro);
+}
+
+.panel-header h2 { font-size: 1rem; font-weight: 600; }
+.panel-body { padding: 1.5rem; }
+
+/* FORM */
+.form-group { margin-bottom: 1.1rem; }
+
+label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  margin-bottom: 0.4rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: var(--negro);
+  border: 1.5px solid var(--gris-claro);
+  border-radius: 8px;
+  color: var(--texto);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus { border-color: var(--verde); }
+select option { background: var(--negro); }
+textarea { resize: vertical; min-height: 70px; }
+
+.btn-generar {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--verde);
+  color: var(--negro);
+  border: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-generar:hover { background: var(--verde-oscuro); }
+
+/* FILTRO */
+.filtro-select {
+  padding: 0.4rem 0.8rem;
+  background: var(--negro);
+  border: 1.5px solid var(--gris-claro);
+  border-radius: 6px;
+  color: var(--texto);
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: var(--texto-suave);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gris-claro);
+}
+
+td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--gris-claro);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-reserva { background: rgba(58,134,255,0.15); color: #3a86ff; }
+.badge-inscripcion { background: rgba(240,192,64,0.15); color: #f0c040; }
+.badge-general { background: rgba(29,185,84,0.15); color: var(--verde); }
+.badge-activo { background: rgba(29,185,84,0.15); color: var(--verde); }
+.badge-inactivo { background: rgba(231,76,60,0.15); color: #e74c3c; }
+
+.valor-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  color: var(--verde);
+}
+
+/* BOTONES ACCION */
+.btns-row { display: flex; gap: 0.4rem; }
+
+.action-btn {
+  background: none;
+  border: 1px solid var(--gris-claro);
+  color: var(--texto-suave);
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.action-btn:hover { border-color: var(--verde); color: var(--verde); }
+.action-btn.eliminar:hover { border-color: #e74c3c; color: #e74c3c; }
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+/* SIMULADOR */
+.resultado-sim {
+  background: var(--negro);
+  border: 1px solid var(--gris-claro);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+.resultado-sim.visible { display: block; }
+.resultado-sim .precio-original { color: var(--texto-suave); font-size: 0.85rem; text-decoration: line-through; }
+.resultado-sim .precio-final { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--verde); letter-spacing: 1px; }
+.resultado-sim .ahorro { color: var(--verde); font-size: 0.85rem; font-weight: 600; }
+.resultado-sim .sin-descuento { color: var(--texto-suave); font-size: 0.9rem; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: rgba(29,185,84,0.2); border: 1px solid var(--verde); color: var(--verde); }
+.toast.error { background: rgba(231,76,60,0.2); border: 1px solid #e74c3c; color: #e74c3c; }

@@ -40,7 +40,7 @@ namespace Infrastructure.Query
 
         public async Task<List<Inscripcion>> VerInscriptos(int entrenamientoId, CancellationToken ct = default)
         {
-            return await _context.Inscripciones.Include(i=>i.cliente).Include(i => i.entrenamiento).ThenInclude(e => e.Entrenador).Where(i => i.IdAct == entrenamientoId).ToListAsync(ct); 
+            return await _context.Inscripciones.Include(i=>i.cliente).Include(i => i.entrenamiento).ThenInclude(e => e.Entrenador).Where(i => i.IdAct == entrenamientoId && i.NroAct==1).ToListAsync(ct); 
         }
     }
 }

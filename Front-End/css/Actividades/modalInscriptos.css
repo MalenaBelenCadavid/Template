@@ -1,0 +1,280 @@
+/* =========================
+   MODAL INSCRIPTOS
+========================= */
+
+.modal-inscriptos {
+  width: min(900px, 95%);
+  max-height: 85vh;
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20,20,30,0.98),
+      rgba(12,12,18,0.98)
+    );
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.45);
+
+  animation: modalFade .25s ease;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.modal-inscriptos .modal-header {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 24px 28px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.06);
+}
+
+.modal-inscriptos .modal-header h2 {
+
+  margin: 0;
+
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  color: #fff;
+}
+
+.modal-inscriptos .modal-header p {
+
+  margin-top: 6px;
+
+  color: rgba(255,255,255,0.55);
+
+  font-size: .95rem;
+}
+
+.cerrar-modal-inscriptos {
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 12px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color: #fff;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+
+  font-size: 1rem;
+}
+
+.cerrar-modal-inscriptos:hover {
+
+  background:
+    rgba(255,255,255,0.12);
+
+  transform: scale(1.05);
+}
+
+/* =========================
+   BODY
+========================= */
+
+.modal-inscriptos .modal-body {
+
+  padding: 24px;
+
+  overflow-y: auto;
+  max-height: 65vh;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.inscriptos-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(260px, 1fr));
+
+  gap: 18px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.inscripto-card {
+
+  position: relative;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.06),
+      rgba(255,255,255,0.03)
+    );
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+
+  transition:
+    transform .2s ease,
+    border .2s ease,
+    background .2s ease;
+}
+
+.inscripto-card:hover {
+
+  transform: translateY(-4px);
+
+  border:
+    1px solid rgba(0,255,170,0.25);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,255,170,0.08),
+      rgba(255,255,255,0.04)
+    );
+}
+
+/* =========================
+   TOP
+========================= */
+
+.inscripto-top {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  margin-bottom: 16px;
+}
+
+.inscripto-top h3 {
+
+  margin: 0;
+
+  color: #fff;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.inscripto-top span {
+
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(0,255,170,0.12);
+
+  color:
+    rgb(0,255,170);
+
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.inscripto-info {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.inscripto-info span {
+
+  color:
+    rgba(255,255,255,0.75);
+
+  font-size: .92rem;
+
+  line-height: 1.4;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.sin-inscriptos {
+
+  text-align: center;
+
+  color:
+    rgba(255,255,255,0.45);
+
+  padding: 40px 20px;
+
+  font-size: 1rem;
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+.modal-inscriptos .modal-body::-webkit-scrollbar {
+
+  width: 8px;
+}
+
+.modal-inscriptos .modal-body::-webkit-scrollbar-thumb {
+
+  background:
+    rgba(255,255,255,0.12);
+
+  border-radius: 999px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes modalFade {
+
+  from {
+
+    opacity: 0;
+    transform:
+      translateY(15px)
+      scale(.98);
+  }
+
+  to {
+
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}

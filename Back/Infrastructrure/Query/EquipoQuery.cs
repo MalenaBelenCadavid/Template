@@ -14,15 +14,15 @@ namespace Infrastructure.Query
         }
         public async Task<Equipo> ObtenerEquipoPorId(int id, CancellationToken ct = default)
         {
-            return await _context.Equipos.AsNoTracking().FirstOrDefaultAsync(e => e.IdEquipo == id, ct);
+            return await _context.Equipos.FirstOrDefaultAsync(e => e.IdEquipo == id, ct);
         }
         public async Task<IEnumerable<Equipo>> ObtenerEquiposPorCompetencia(int competenciaId, CancellationToken ct = default)
         {
-            return await _context.Equipos.AsNoTracking().Where(e => e.IdCompetencia == competenciaId).ToListAsync(ct);
+            return await _context.Equipos.Where(e => e.IdCompetencia == competenciaId).ToListAsync(ct);
         }
         public async Task<bool> ExisteEquipo(int equipoId, CancellationToken ct = default)
         {
-            return await _context.Equipos.AsNoTracking().AnyAsync(e => e.IdEquipo == equipoId, ct);
+            return await _context.Equipos.AnyAsync(e => e.IdEquipo == equipoId, ct);
         }
     }
 }

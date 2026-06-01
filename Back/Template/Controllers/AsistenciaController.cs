@@ -36,17 +36,23 @@ namespace Template.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]  
-        public async Task<IActionResult> ConsultarAsistencia(int id) 
+        [HttpGet("{idActividad}")]  
+        public async Task<IActionResult> ConsultarAsistencia(int idActividad) 
         {
-            var response = await _service.ConsultarAsistencia(id); 
+            var response = await _service.ConsultarAsistencia(idActividad); 
             return Ok(response);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarAsistencia([FromQuery] int idClase) 
+        [HttpGet("asistencias/clase/{idClase}")]
+        public async Task<IActionResult> ListarAsistenciasClase([FromRoute] int idClase) 
         {
-            var response = await _service.ListarAsistencia(idClase); 
+            var response = await _service.ListarAsistenciaClase(idClase); 
+            return Ok(response);
+        }
+        [HttpGet("asistencias/entrenamiento/{idEntrenamiento}")]
+        public async Task<IActionResult> ListarAsistenciasEntrenamiento([FromRoute] int idEntrenamiento)
+        {
+            var response = await _service.ListarAsistenciaEntrenamiento(idEntrenamiento);
             return Ok(response);
         }
 

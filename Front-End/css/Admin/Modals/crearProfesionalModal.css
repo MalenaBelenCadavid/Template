@@ -110,8 +110,6 @@ body.modal-open{
 .modal-close:hover{
   background:rgba(239,68,68,.16);
   color:#ef4444;
-
-  transform:rotate(90deg);
 }
 
 /* FORM */

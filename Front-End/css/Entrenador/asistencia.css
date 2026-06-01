@@ -57,3 +57,25 @@ cursor:pointer;
 margin-top:20px;
 
 }
+
+.estado-asistencia{
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.estado-asistencia.presente{
+    background-color: rgba(46, 204, 113, 0.15);
+    color: #27ae60;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.estado-asistencia.ausente{
+    background-color: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.4);
+}

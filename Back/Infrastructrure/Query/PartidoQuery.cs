@@ -14,14 +14,16 @@ namespace Infrastructure.Query
         }
         public async Task<Partido> ObtenerPartidoPorId(int id, CancellationToken ct = default)
         {
-            return await _context.Partidos.AsNoTracking().FirstOrDefaultAsync(p => p.IdPartido == id, ct);
+            return await _context.Partidos.Include(p => p.EquipoLocal).Include(p => p.EquipoVis).FirstOrDefaultAsync(p => p.IdPartido == id, ct);
         }
         public async Task<IEnumerable<Partido>> ObtenerPartidoPorEquipo(int equipoId, CancellationToken ct = default)
         {
-            return await _context.Partidos.AsNoTracking().Where(p => p.IdEquipoLocal == equipoId ||
+            return await _context.Partidos.Where(p => p.IdEquipoLocal == equipoId ||
                             p.IdEquipoVis == equipoId)
                 .ToListAsync(ct);
         }
+
+
     }
 }
 

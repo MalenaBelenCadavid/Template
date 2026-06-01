@@ -4,47 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Entrenador | GolAhora</title>
-    <link rel="stylesheet" href="./css/Entrenador/entrenador.css">
-    <link rel="stylesheet" href="./css/global/global.css">
-    <link rel="stylesheet" href="./css/global/toast.css">
-    <link rel="stylesheet" href="./css/Entrenador/card.css">
-    <link rel="stylesheet" href="./css/Entrenador/renderentrenamiento.css">
-    <link rel="stylesheet" href="./css/Entrenador/asistencia.css">
-    <link rel="stylesheet" href="./css/Entrenador/itemasistencia.css">
-    <link rel="stylesheet" href="./css/Entrenador/eliminarAsistencia.css">
-    <script src="./js/renderEliminarAsistencia.js"></script>
-    <script src="./js/renderEntrenamientosEliminar.js"></script>
-    
+    <title>Panel Profesor | GolAhora</title>
 
+    <link rel="stylesheet" href="./css/profesor/profesor.css">
+    <link rel="stylesheet" href="./css/profesor/ClasesCards.css">
+    <link rel="stylesheet" href="./css/profesor/RenderProfesorRegistrar.css">
+    <link rel="stylesheet" href="./css/profesor/RenderAlumnos.css">
 
-
-
+    <script type="module" src="main.js"></script>
 </head>
 
 <body>
 
 <div class="dashboard">
-
     <aside class="sidebar">
 
-        <h2 class="logo">
+        <h2 class="logoProfesor">
             Gol<span>Ahora</span>
         </h2>
 
         <nav class="sidebar-nav">
 
-        <button  class="sidebar-btn"id="btnRegistrarAsistencia">
-        Registrar Asistencia Entrenamiento
-        </button>
-
-            <button class="sidebar-btn" id="btnConsultar">
-                Consultar Entrenamiento
+            <button class="sidebar-btn" id="btnRegistrarAsistencia">
+                Pasar asistencia
             </button>
 
-            <button class="sidebar-btn" id="btnEliminarAsistencia" > Eliminar Asistencia Entrenamiento</button>
-
-            
+            <button class="sidebar-btn" id="btnConsultar">
+                Ver clases asignadas
+            </button>
 
         </nav>
 
@@ -55,15 +42,11 @@
 
         <header class="topbar">
 
-            <h1>Panel de Entrenador</h1>
-
-            <div class="user">
-                👤 Admin
-            </div>
+            <h1>Panel de Profesor</h1>
 
         </header>
 
-        <!-- Pantalla inicial -->
+
         <section class="hero">
 
             <div class="overlay">
@@ -73,167 +56,20 @@
                 </h1>
 
                 <p>
-                    Gestiona entrenamientos y asistencias
+                    Gestiona clases y asistencias
                 </p>
 
             </div>
 
         </section>
 
+        <section class="content-section" id="Registrar"></section>
+
+        <section class="content-section hidden" id="Consultar"></section>
+
     </main>
 
 </div>
 
-
-<!-- Vista para consultar entrenamientos -->
-<template id="vistaEntrenamientos">
-
-<header class="topbar">
-
-    <h1>Panel de Entrenador</h1>
-
-    <div class="user">
-        👤 Admin
-    </div>
-
-</header>
-
-<section class="dashboard-entrenamientos">
-
-    <div class="perfil">
-
-        <div class="info">
-
-            <h2>Prof. Martín González</h2>
-
-            <p>
-                Panel entrenador
-            </p>
-
-        </div>
-
-        <span>
-            Ciclo 2025
-        </span>
-
-    </div>
-
-
-    <div class="estadisticas">
-
-        <div class="card-estadistica">
-
-            <p>
-                Entrenamientos asignados
-            </p>
-
-            <h2>4</h2>
-
-        </div>
-
-        <div class="card-estadistica">
-
-            <p>
-                Total jugadores
-            </p>
-
-            <h2>31</h2>
-
-        </div>
-
-        <div class="card-estadistica">
-
-            <p>
-                Entrenamientos activos
-            </p>
-
-            <h2>4</h2>
-
-        </div>
-
-    </div>
-
-
-    <h2>
-        MIS ENTRENAMIENTOS
-    </h2>
-
-
-    <div class="contenedor-entrenamientos">
-
-        <div class="card-entrenamiento">
-
-            <h2>Entrenamiento Juveniles</h2>
-
-            <p>
-                Lun/Mié 18:00 - Cancha 2
-            </p>
-
-            <span class="jugadores">
-                8 jugadores
-            </span>
-
-        </div>
-
-
-        <div class="card-entrenamiento">
-
-            <h2>Entrenamiento Reserva</h2>
-
-            <p>
-                Mar/Jue 19:30 - Cancha 1
-            </p>
-
-            <span class="jugadores">
-                10 jugadores
-            </span>
-
-        </div>
-
-
-        <div class="card-entrenamiento">
-
-            <h2>Entrenamiento Primera</h2>
-
-            <p>
-                Vie 20:00 - Cancha 3
-            </p>
-
-            <span class="jugadores">
-                6 jugadores
-            </span>
-
-        </div>
-
-
-        <div class="card-entrenamiento">
-
-            <h2>Entrenamiento Femenino</h2>
-
-            <p>
-                Lun/Vie 17:00 - Cancha 4
-            </p>
-
-            <span class="jugadores">
-                7 jugadores
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-</template>
-
-<script src="./js/profesor/asistenciaitem.js"></script>
-<script src="./js/profesor/cardclase.js"></script>
-<script src="./js/profesor/profesor.js"></script>
-<script src="./js/profesor/RegistraAsistencia.js"></script>
-<script src="./js/profesor/renderasistencia.js"></script>
-<script src="./js/profesor/renderclaseAsistencia.js"></script>
-<script src="./js/profesor/renderclaseEliminar.js"></script>
-<script src="./js/profesor/renderEliminarAsistencia.js"></script>
-<script src="./js/profesor/renderizadorcards.js"></script>
 </body>
 </html>

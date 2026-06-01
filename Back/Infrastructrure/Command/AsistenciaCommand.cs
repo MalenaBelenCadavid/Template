@@ -32,7 +32,7 @@ namespace Infrastructure.Command
             return Asistencia;
         }
 
-        public Task<Administrador> PasarAsistencia(ModificarAsistenciaRequest request)
+        public Task<Asistencia> PasarAsistencia(ModificarAsistenciaRequest request)
         {
             throw new NotImplementedException();
         }

@@ -6,6 +6,7 @@ using Application.Interfaces.Clase;
 using Application.Interfaces.Cliente;
 using Application.Interfaces.Competencias;
 using Application.Interfaces.Entrenamiento;
+using Application.Interfaces.Equipos;
 using Application.Interfaces.Incripcion;
 
 using Domain.Entities;
@@ -26,6 +27,7 @@ namespace Application.UseCases
         private readonly IEntrenamientoCommand _entrenamientoCommand;
         private readonly ICompetenciaCommand _competenciaCommand;
         private readonly IClaseCommand _claseCommand;
+        private readonly IEquipoQuery _equipoQuery;
         
         
 
@@ -39,7 +41,8 @@ namespace Application.UseCases
             IEntrenamientoCommand entrenamientoCommand,
             IClaseCommand claseCommand,
             ICompetenciaCommand competenciaCommand,
-            IClienteQuery clienteQuery
+            IClienteQuery clienteQuery,
+            IEquipoQuery equipoQuery
             )
         {
             _asistenciaCommand = asistenciaCommand;
@@ -52,6 +55,7 @@ namespace Application.UseCases
             _competenciaCommand = competenciaCommand;
             _claseCommand = claseCommand;
             _clienteQuery = clienteQuery;
+            _equipoQuery = equipoQuery;
         }
 
 
@@ -109,6 +113,14 @@ namespace Application.UseCases
                     }
                     precioInscr = entrenamiento.Precio;
                     cupoAct = entrenamiento.Cupo;
+                    var asistenciaEntrenamiento= new Asistencia
+                    {
+                        DniCliente = request.DniCliente,
+                        IdClase = null,
+                        IdEntrenamiento = entrenamiento.IdEntrenamiento,
+                        Presente = null
+                    };
+                    await _asistenciaCommand.RegistrarAsistencia(asistenciaEntrenamiento);
                     break;
 
                 case 2: // Clase
@@ -117,8 +129,17 @@ namespace Application.UseCases
                     {
                         throw new ExceptionNotFound("No se encontró la clase");
                     }
+
+                    var asistenciaClase = new Asistencia
+                    {
+                      DniCliente = request.DniCliente,
+                      IdClase=clase.IdClase,
+                      IdEntrenamiento=null,
+                      Presente=null
+                    };
                     precioInscr = clase.Precio;
                     cupoAct=clase.Cupo;
+                    await _asistenciaCommand.RegistrarAsistencia(asistenciaClase);
                     break;
 
                 case 3: // Competencia
@@ -182,7 +203,6 @@ namespace Application.UseCases
                 IdAct = InscripcionCreada.IdAct,
                 IdDescuento = 2,
                 NroAct =InscripcionCreada.NroAct
-
             };
 
 

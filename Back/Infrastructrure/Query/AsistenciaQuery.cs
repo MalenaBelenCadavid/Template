@@ -15,11 +15,15 @@ namespace Infrastructure.Query
         }
 
         public async Task<Domain.Entities.Asistencia> ConsultarAsistencia(int idAsistencia) {
-            return await _context.Asistencias.FirstOrDefaultAsync(e => e.IdAsistencia == idAsistencia);
+            return await _context.Asistencias.Include(a=>a.Cliente).FirstOrDefaultAsync(e => e.IdAsistencia == idAsistencia);
         }
 
-        public async Task<List<Domain.Entities.Asistencia>> ListarAsistencia(int idClase) {
-            return await _context.Asistencias.Where(a => a.IdClase == idClase).ToListAsync();
+        public async Task<List<Domain.Entities.Asistencia>> ListarAsistenciaClase(int idClase,CancellationToken ct = default) {
+            return await _context.Asistencias.Include(a=>a.Cliente).Where(a => a.IdClase == idClase).ToListAsync(ct);
+        }
+        public async Task<List<Domain.Entities.Asistencia>> ListarAsistenciaEntrenamiento(int idEntrenamiento, CancellationToken ct = default)
+        {
+            return await _context.Asistencias.Include(a => a.Cliente).Where(a => a.IdEntrenamiento == idEntrenamiento).ToListAsync(ct);
         }
 
         public async Task<List<Domain.Entities.Asistencia>> ConsultarAsistenciaporDNI(int DniCliente) {

@@ -21,15 +21,17 @@ public class PartidoService : IPartidoService
     private readonly IPartidoCommand _IPartidoCommand;
     private readonly IPartidoQuery _IPartidoQuery;
     private readonly IEquipoQuery _IEquipoQuery;
+    private readonly IEquipoCommand _equipoCommand;
     private readonly ICompetenciaQuery _ICompetenciaQuery;
-    public PartidoService(IPartidoCommand partidoCommand, IPartidoQuery partidoQuery, IEquipoQuery equipoQuery, ICompetenciaQuery competenciaQuery)
-    {
-        _IPartidoCommand = partidoCommand;
-        _IPartidoQuery = partidoQuery;
-        _IEquipoQuery = equipoQuery;
-        _ICompetenciaQuery = competenciaQuery;
-    }
-    public async Task<int> CrearPartido(AgregarPartidoRequest request, CancellationToken ct = default)
+    public PartidoService(IPartidoCommand partidoCommand, IPartidoQuery partidoQuery, IEquipoQuery equipoQuery, ICompetenciaQuery competenciaQuery, IEquipoCommand equipoCommand)
+        {
+            _IPartidoCommand = partidoCommand;
+            _IPartidoQuery = partidoQuery;
+            _IEquipoQuery = equipoQuery;
+            _ICompetenciaQuery = competenciaQuery;
+            _equipoCommand = equipoCommand;
+        }
+        public async Task<int> CrearPartido(AgregarPartidoRequest request, CancellationToken ct = default)
     {
         if (request.idEquipoLocal == request.idEquipoVis)
         {
@@ -49,7 +51,6 @@ public class PartidoService : IPartidoService
         {
             throw new ArgumentException("La competencia no existe.");
         }
-
         var partido = new Partido
         {
             IdCompetencia = request.idCompetencia,
@@ -82,14 +83,35 @@ public class PartidoService : IPartidoService
         {
             throw new ArgumentException("La competencia no existe.");
         }
-            partidoExistente.IdPartido = request.idPartido;
-            partidoExistente.IdCompetencia = request.idCompetencia;
-            partidoExistente.IdEquipoLocal = request.idEquipoLocal;
-            partidoExistente.GolesLocal= request.GolesLocal;
-            partidoExistente.GolesVis = request.GolesVis;
-            partidoExistente.IdEquipoVis = request.idEquipoVis;
-            partidoExistente.HoraInicio = request.horarioinicio;
-            partidoExistente.HoraFin = request.horariofin;
+
+        if (request.GolesLocal > request.GolesVis) 
+        {
+           var equipoLoc = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           equipoLoc.Victorias++;
+           equipoVis.Derrotas++;
+           await _equipoCommand.ModificarEquipo(equipoLoc);
+           await _equipoCommand.ModificarEquipo(equipoVis);
+        }
+
+        if (request.GolesLocal < request.GolesVis)
+        {
+           var equipoLoc = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           equipoVis.Victorias++;
+           equipoLoc.Derrotas++;
+           await _equipoCommand.ModificarEquipo(equipoLoc);
+           await _equipoCommand.ModificarEquipo(equipoVis);
+        }
+
+        partidoExistente.IdPartido = request.idPartido;
+        partidoExistente.IdCompetencia = request.idCompetencia;
+        partidoExistente.IdEquipoLocal = request.idEquipoLocal;
+        partidoExistente.GolesLocal= request.GolesLocal;
+        partidoExistente.GolesVis = request.GolesVis;
+        partidoExistente.IdEquipoVis = request.idEquipoVis;
+        partidoExistente.HoraInicio = request.horarioinicio;
+        partidoExistente.HoraFin = request.horariofin;
 
         await _IPartidoCommand.ModificarPartido(partidoExistente, ct);
     }

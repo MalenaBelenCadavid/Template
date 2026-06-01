@@ -2,6 +2,9 @@
 using Application.DTOs.Response.Asistencia;
 using Application.Exceptions;
 using Application.Interfaces.Asistencia;
+using Application.Interfaces.Clase;
+using Application.Interfaces.Entrenamiento;
+using Application.Interfaces.Incripcion;
 using Domain.Entities;
 
 
@@ -11,11 +14,16 @@ namespace Application.UseCases
     {
         private readonly IAsistenciaCommand _asistenciaCommand;
         private readonly IAsistenciaQuery _asistenciaQuery;
+        private readonly IClaseQuery _claseQuery;
+        private readonly IEntrenamientoQuery _entrenamientoQuery;
+        private readonly IInscripcionQuery _inscripcionQuery;
        
 
         public AsistenciaService(
             IAsistenciaCommand asistenciaCommand,
-            IAsistenciaQuery asistenciaQuery
+            IAsistenciaQuery asistenciaQuery,
+            IClaseQuery claseQuery,
+            IEntrenamientoQuery entrenamientoQuery
             )
         {
             _asistenciaCommand = asistenciaCommand;
@@ -38,29 +46,31 @@ namespace Application.UseCases
             {
                 IdAsistencia = claseCreada.IdAsistencia,
                 DniCliente = claseCreada.DniCliente,
-                IdClase = claseCreada.IdClase,
-                Presente = claseCreada.Presente
+                IdClase = (int)claseCreada.IdClase,
+                Presente = (bool)claseCreada.Presente
             };
         }
 
         public async Task<AsistenciaResponse> ModificarAsistencia(ModificarAsistenciaRequest request) {
-
-        
-            var asistencia = await _asistenciaQuery.ConsultarAsistencia(request.IdAsistencia);
-            
-
+                   
+            var asistencia = await _asistenciaQuery.ConsultarAsistencia(request.IdAsistencia) ?? throw new ExceptionNotFound("Alumno no encontrado");
+            if(asistencia.DniCliente != request.DniCliente) 
+            {
+                throw new ExceptionConflict("Al alumno no le corresponde esta asistencia");
+            }
             asistencia.Presente = request.Presente;
-            asistencia.DniCliente= request.DniCliente;
-            asistencia.IdClase= request.IdClase;
-           
-
+                   
             var asistenciaActualizada = await _asistenciaCommand.ModificarAsistencia (asistencia);
 
             return new AsistenciaResponse
             {
-                Presente = asistenciaActualizada.Presente,
+                IdAsistencia = asistenciaActualizada.IdAsistencia,
                 DniCliente = asistenciaActualizada.DniCliente,
-                IdClase = asistenciaActualizada.IdClase
+                nombre = asistenciaActualizada.Cliente.Nombre,
+                apellido = asistenciaActualizada.Cliente.Apellido,
+                IdClase = asistenciaActualizada.IdClase,
+                IdEntrenamiento = asistenciaActualizada.IdEntrenamiento,
+                Presente = asistenciaActualizada.Presente
             };
         }
 
@@ -72,9 +82,9 @@ namespace Application.UseCases
 
             return new AsistenciaResponse
             {
-                Presente = asistencia.Presente,
+                Presente = (bool)asistencia.Presente,
                 DniCliente = asistencia.DniCliente,
-                IdClase = asistencia.IdClase,
+                IdClase = (int)asistencia.IdClase,
             };
 
 
@@ -87,24 +97,41 @@ namespace Application.UseCases
 
             return new AsistenciaResponse
             {
-                Presente = asistencia.Presente,
+                Presente = (bool)asistencia.Presente,
                 DniCliente = asistencia.DniCliente,
-                IdClase = asistencia.IdClase,
+                IdClase = (int)asistencia.IdClase,
             };
 
         }
 
-        public async Task<List<AsistenciaResponse>> ListarAsistencia(int idClase)
+        public async Task<List<AsistenciaResponse>> ListarAsistenciaClase(int idClase)
         {
-            var asistencias = await _asistenciaQuery.ListarAsistencia(idClase);
+            var asistencias = await _asistenciaQuery.ListarAsistenciaClase(idClase);
 
-            return asistencias
-                .Where(a => a.IdClase == idClase) 
-                .Select(r => new AsistenciaResponse
+            return asistencias.Select(r => new AsistenciaResponse
                 {
                     IdAsistencia = r.IdAsistencia,
                     DniCliente = r.DniCliente,
+                    nombre = r.Cliente.Nombre,
+                    apellido=r.Cliente.Apellido,
                     IdClase = r.IdClase,
+                    IdEntrenamiento=null,
+                    Presente = r.Presente
+                }).ToList();
+        }
+
+        public async Task<List<AsistenciaResponse>> ListarAsistenciaEntrenamiento(int idEntrenamiento)
+        {
+            var asistencias = await _asistenciaQuery.ListarAsistenciaEntrenamiento(idEntrenamiento);
+
+            return asistencias.Select(r => new AsistenciaResponse
+                {
+                    IdAsistencia = r.IdAsistencia,
+                    DniCliente = r.DniCliente,
+                    nombre = r.Cliente.Nombre,
+                    apellido = r.Cliente.Apellido,
+                    IdClase = null,
+                    IdEntrenamiento=r.IdEntrenamiento,
                     Presente = r.Presente
                 }).ToList();
         }
@@ -126,17 +153,13 @@ namespace Application.UseCases
             return new AsistenciaResponse
             {
                 IdAsistencia = asistencia.IdAsistencia,
-                Presente = asistencia.Presente,
+                Presente = (bool)asistencia.Presente,
                 DniCliente = asistencia.DniCliente,
-                IdClase = asistencia.IdClase,
+                IdClase = (int)asistencia.IdClase,
             };
 
         }
 
-
-        
-
-
-
+       
     }
 }

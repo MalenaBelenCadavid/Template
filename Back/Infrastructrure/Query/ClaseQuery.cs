@@ -21,7 +21,7 @@ namespace Infrastructure.Query
         }
         public async Task<List<Domain.Entities.Inscripcion>> MostrarInscriptos(int claseId,CancellationToken ct = default) {
 
-            return await _context.Inscripciones.Include(i=>i.cliente).Where(i=>i.IdAct==claseId).ToListAsync(ct);
+            return await _context.Inscripciones.Include(i=>i.cliente).Where(i=>i.IdAct==claseId && i.NroAct==2).ToListAsync(ct);
         }
 
         public async Task<Domain.Entities.Inscripcion> DevolverInscripto(int InscripcionId, CancellationToken ct = default) {

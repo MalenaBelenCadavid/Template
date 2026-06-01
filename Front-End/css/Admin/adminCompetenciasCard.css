@@ -13,7 +13,308 @@
 }
 
 .competencia-admin-card:hover{
-  transform:translateY(-4px);
+  transform:translateY(-4px);/* =========================
+   GRID
+========================= */
+
+.admin-competencias-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:22px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.competencia-admin-card{
+  background:linear-gradient(
+    180deg,
+    #171717 0%,
+    #101010 100%
+  );
+
+  border:1px solid rgba(255,255,255,0.06);
+
+  border-radius:22px;
+
+  overflow:hidden;
+
+  transition:0.28s ease;
+
+  position:relative;
+}
+
+.competencia-admin-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    135deg,
+    rgba(99,102,241,0.08),
+    rgba(168,85,247,0.04)
+  );
+  opacity:0;
+  transition:0.25s ease;
+}
+
+.competencia-admin-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(99,102,241,0.35);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.45),
+    0 0 0 1px rgba(99,102,241,0.08);
+}
+
+.competencia-admin-card:hover::before{
+  opacity:1;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.competencia-admin-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding:24px 24px 14px;
+}
+
+.competencia-badge{
+  background:rgba(99,102,241,0.18);
+  color:#c7d2fe;
+
+  border:1px solid rgba(99,102,241,0.25);
+
+  padding:7px 14px;
+
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:700;
+
+  backdrop-filter:blur(10px);
+}
+
+.competencia-title{
+  color:white;
+  font-size:24px;
+  font-weight:700;
+  margin-top:12px;
+}
+
+.competencia-precio{
+  color:#818cf8;
+  font-size:24px;
+  font-weight:800;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.competencia-body{
+  padding:0 24px 24px;
+}
+
+.competencia-descripcion{
+  color:#b4b4b8;
+  line-height:1.7;
+  margin-bottom:22px;
+  font-size:14px;
+}
+
+.competencia-info{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.competencia-info-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:12px 14px;
+
+  border-radius:12px;
+
+  background:rgba(255,255,255,0.03);
+
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.competencia-label{
+  color:#9ca3af;
+  font-size:13px;
+}
+
+.competencia-value{
+  color:white;
+  font-weight:700;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.competencia-footer{
+  border-top:1px solid rgba(255,255,255,0.06);
+
+  padding:20px 24px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:14px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.admin-card-actions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+
+/* =========================
+   BUTTON BASE
+========================= */
+
+.admin-btn{
+  border:none;
+  outline:none;
+
+  padding:13px 16px;
+
+  border-radius:14px;
+
+  cursor:pointer;
+
+  font-weight:700;
+  font-size:14px;
+
+  transition:0.25s ease;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  letter-spacing:0.2px;
+}
+
+/* =========================
+   EDITAR
+========================= */
+
+.admin-btn-edit{
+  background:linear-gradient(
+    135deg,
+    #06b6d4,
+    #3b82f6
+  );
+
+  color:white;
+
+  box-shadow:
+    0 10px 20px rgba(59,130,246,0.25);
+}
+
+.admin-btn-edit:hover{
+  transform:translateY(-2px) scale(1.02);
+
+  box-shadow:
+    0 14px 24px rgba(59,130,246,0.35);
+}
+
+/* =========================
+   FIXTURE
+========================= */
+
+.admin-btn-fixture{
+  background:linear-gradient(
+    135deg,
+    #8b5cf6,
+    #6366f1
+  );
+
+  color:white;
+
+  box-shadow:
+    0 10px 20px rgba(99,102,241,0.25);
+}
+
+.admin-btn-fixture:hover{
+  transform:translateY(-2px) scale(1.02);
+
+  box-shadow:
+    0 14px 24px rgba(99,102,241,0.35);
+}
+
+/* =========================
+   VER EQUIPOS
+========================= */
+
+.admin-btn-teams{
+  background:linear-gradient(
+    135deg,
+    #f59e0b,
+    #f97316
+  );
+
+  color:white;
+
+  box-shadow:
+    0 10px 20px rgba(249,115,22,0.22);
+}
+
+.admin-btn-teams:hover{
+  transform:translateY(-2px) scale(1.02);
+
+  box-shadow:
+    0 14px 24px rgba(249,115,22,0.32);
+}
+
+/* =========================
+   ELIMINAR
+========================= */
+
+.admin-btn-delete{
+  background:linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+
+  color:white;
+
+  box-shadow:
+    0 10px 20px rgba(220,38,38,0.22);
+}
+
+.admin-btn-delete:hover{
+  transform:translateY(-2px) scale(1.02);
+
+  box-shadow:
+    0 14px 24px rgba(220,38,38,0.35);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:640px){
+
+  .admin-card-actions{
+    grid-template-columns:1fr;
+  }
+
+}
   border-color:#22c55e;
   box-shadow:0 10px 30px rgba(0,0,0,0.35);
 }
@@ -115,4 +416,122 @@
 .competencia-btn-delete:hover{
   background:#dc2626;
   border-color:#dc2626;
+}
+/* =========================
+   ACTIONS
+========================= */
+
+.admin-card-actions{
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+
+/* =========================
+   BOTON BASE
+========================= */
+
+.admin-btn{
+  border:none;
+  outline:none;
+  padding:12px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:14px;
+  transition:0.25s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+/* =========================
+   EDITAR
+========================= */
+
+.admin-btn-edit{
+  background:#22c55e;
+  color:#0b0b0b;
+}
+
+.admin-btn-edit:hover{
+  background:#16a34a;
+  transform:translateY(-2px);
+}
+
+/* =========================
+   FIXTURE
+========================= */
+
+.admin-btn-fixture{
+  background:#2563eb;
+  color:white;
+}
+
+.admin-btn-fixture:hover{
+  background:#1d4ed8;
+  transform:translateY(-2px);
+}
+
+
+.admin-btn-fixture:disabled {
+  background: #3a3a3a;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none !important;
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0.6;
+}
+
+
+/* =========================
+   VER EQUIPOS
+========================= */
+
+.admin-btn-teams{
+  background:#9333ea;
+  color:white;
+}
+
+.admin-btn-teams:hover{
+  background:#7e22ce;
+  transform:translateY(-2px);
+}
+.admin-btn-teams:disabled {
+  background: #3a3a3a;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none !important;
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0.6;
+}
+
+/* =========================
+   ELIMINAR
+========================= */
+
+.admin-btn-delete{
+  background:#262626;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.admin-btn-delete:hover{
+  background:#dc2626;
+  border-color:#dc2626;
+  transform:translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:640px){
+
+  .admin-card-actions{
+    grid-template-columns:1fr;
+  }
+
 }

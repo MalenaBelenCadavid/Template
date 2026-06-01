@@ -44,7 +44,7 @@ namespace Infrastructure.Command
             if (!competencia)
                 throw new ExceptionNotFound("Competencia no encontrada");
 
-            equipo.IdCompetencia = idcompetencia;
+            
             await _context.Equipos.AddAsync(equipo, ct);
             await _context.SaveChangesAsync(ct);
             return equipo.IdEquipo;

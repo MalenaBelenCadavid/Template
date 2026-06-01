@@ -1,15 +1,15 @@
 using Application.Interfaces;
 using Domain.Entities;
-using Infrastructrure.Persistence;
+using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructrure.Query
 {
     public class DescuentoQuery : IDescuentoQuery
     {
-        private readonly TemplateContext _context;
+        private readonly AppDbContext _context;
 
-        public DescuentoQuery(TemplateContext context)
+        public DescuentoQuery(AppDbContext context)
         {
             _context = context;
         }

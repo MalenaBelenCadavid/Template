@@ -10,5 +10,6 @@ namespace Application.Interfaces.Partidos
         Task<int> CrearPartido(Partido partido, CancellationToken ct = default);
         Task ModificarPartido(Partido partido, CancellationToken ct = default);
         Task EliminarPartido(Partido partido, CancellationToken ct = default);
+        Task<IEnumerable<Partido>> AgregarPartidos(List<Partido> fixture, CancellationToken ct = default);
     }
 }

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Descuentos - Gol Ahora</title>
+  <link rel="stylesheet" href="./css/style.css"/>
+  <link rel="stylesheet" href="./css/descuentos.css"/>
+
+<script>
+
+const adminLogueado =
+localStorage.getItem("adminLogueado");
+
+if(adminLogueado !== "true")
+{
+   window.location.href =
+   "./login.html";
+}
+
+</script>
+  
+  <script defer src="./js/Descuentos/descuentos.js"></script>
+</head>
+<body>
+ 
+  <nav>
+    <a href="index.html" class="logo">GOL<span>AHORA</span></a>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="reportes.html">Reportes</a></li>
+      <li><a href="descuentos.html" class="active">Descuentos</a></li>
+    </ul>
+    <a href="login.html" class="btn">Cerrar sesión</a>
+  </nav>
+ 
+  <div class="container">
+ 
+    <div class="page-header">
+      <h1>Gestión de <span>Descuentos</span></h1>
+      <p>Solo los socios pueden recibir descuentos al reservar o inscribirse</p>
+    </div>
+ 
+    <div class="grid-2">
+ 
+      <!-- FORMULARIO CREAR -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>➕ Crear descuento</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="tipoDescuento">Tipo de descuento</label>
+            <select id="tipoDescuento">
+              <option value="">Seleccioná un tipo</option>
+              <option value="Reserva">Reserva</option>
+              <option value="Inscripcion">Inscripción</option>
+              <option value="General">General (aplica a todo)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="valorDescuento">Valor (%)</label>
+            <input type="number" id="valorDescuento" min="1" max="100" placeholder="Ej: 15"/>
+          </div>
+          <div class="form-group">
+            <label for="descripcionDescuento">Descripción</label>
+            <textarea id="descripcionDescuento" placeholder="Ej: Descuento para socios en reservas de canchas"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="fechaInicio">Fecha inicio</label>
+            <input type="datetime-local" id="fechaInicio"/>
+          </div>
+          <div class="form-group">
+            <label for="fechaFin">Fecha fin</label>
+            <input type="datetime-local" id="fechaFin"/>
+          </div>
+          <button class="btn-generar" onclick="crearDescuento()">Crear descuento</button>
+        </div>
+      </div>
+ 
+      <!-- SIMULADOR -->
+      <div class="panel">
+        <div class="panel-header">
+          <h2>🧮 Simulador para socios</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="simPrecio">Precio original ($)</label>
+            <input type="number" id="simPrecio" placeholder="Ej: 5000" min="0"/>
+          </div>
+          <div class="form-group">
+            <label for="simTipo">Tipo de acción</label>
+            <select id="simTipo">
+              <option value="Reserva">Reserva</option>
+              <option value="Inscripcion">Inscripción</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <button class="btn-generar" onclick="simular()">Calcular precio</button>
+          <div class="resultado-sim" id="resultadoSim"></div>
+        </div>
+      </div>
+ 
+    </div>
+ 
+    <!-- LISTADO -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2>🏷️ Descuentos registrados</h2>
+        <select id="filtroTipo" class="filtro-select" onchange="filtrar()">
+          <option value="">Todos los tipos</option>
+          <option value="Reserva">Reserva</option>
+          <option value="Inscripcion">Inscripción</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tipo</th>
+              <th>Valor</th>
+              <th>Descripción</th>
+              <th>Vigencia</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaDescuentos">
+            <tr><td colspan="7" class="empty">No hay descuentos registrados.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+  </div>
+ 
+  <div class="toast" id="toast"></div>
+ 
+  <footer>
+    <p>© 2026 <span>Gol Ahora</span> · El Buen Deporte · Grupo 3 - IS1</p>
+  </footer>
+ 
+</body>
+</html>

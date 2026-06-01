@@ -120,3 +120,34 @@ export async function getDataQueryParams(endpointUrl, params = {})
     throw new Error(error.message || "No se pudo conectar con el servidor");
   }
 }
+
+export async function putDataWithQueryParams(endpointUrl, params = {}) {
+  const query = new URLSearchParams(params).toString();
+
+  const url = `${base_Url}${endpointUrl}?${query}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
+
+    if (!response.ok) {
+      throw new Error(
+        data?.message ||
+        data?.Message ||
+        `Error HTTP ${response.status}`
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+    throw error;
+  }
+}

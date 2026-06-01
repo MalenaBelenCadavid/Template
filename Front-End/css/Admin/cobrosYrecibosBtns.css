@@ -1,0 +1,110 @@
+.cobro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.action-cobro-btn {
+  background: #161616;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 2rem;
+  border-radius: 12px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.action-cobro-btn:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* ICONO */
+.action-cobro-btn .icon {
+  font-size: 2.2rem;
+  padding: 0.6rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* COLORES POR BOTÓN */
+.icon.modificar {
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+}
+
+.icon.imprimir {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.icon.consultar {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+}
+
+.icon.descuento {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* TEXTO */
+.action-cobro-btn strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.recibo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.action-recibo-btn {
+  background: #161616;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 2rem;
+  border-radius: 10px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.action-recibo-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.action-recibo-btn strong {
+  display: block;
+  font-size: 1.25rem;
+}
+
+.section-title {
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.icon {
+  font-size: 2.2rem;
+  padding: 0.6rem;
+  border-radius: 8px;
+}
+
+.icon-green { background: rgba(34,197,94,0.1); color: #22c55e; }
+.icon-yellow { background: rgba(234,179,8,0.1); color: #eab308; }
+.icon-purple { background: rgba(168,85,247,0.1); color: #a855f7; }
+.icon-blue { background: rgba(59,130,246,0.1); color: #3b82f6; }

@@ -88,6 +88,7 @@ export function crearTipoCancha() {
                     <input
                         type="number"
                         id="duracion"
+                        step="0.1"
                         placeholder="1"
                     >
 

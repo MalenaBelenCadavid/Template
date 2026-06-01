@@ -9,8 +9,10 @@ namespace Application.Interfaces.Asistencia
      Task<AsistenciaResponse> ModificarAsistencia(ModificarAsistenciaRequest request);
      Task<AsistenciaResponse> EliminarAsitencia(int IdAsistencia); // también faltaba el parámetro
      Task<AsistenciaResponse> ConsultarAsistencia(int IdAsistencia); // también faltaba
-     Task<List<AsistenciaResponse>> ListarAsistencia(int idClase);
+     Task<List<AsistenciaResponse>> ListarAsistenciaClase(int idClase);
+     Task<List<AsistenciaResponse>> ListarAsistenciaEntrenamiento(int idEntrenamiento);
      Task<AsistenciaResponse> PasarAsistencia(ModificarAsistenciaRequest request);
+
         
     }
 }

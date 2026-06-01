@@ -1,196 +1,161 @@
-const btnConsultar =
-document.getElementById(
-"btnConsultar"
-);
+import { getData } from "../Global/ApiServices.js";
+import { renderProfesorRegistrar } from "./renderProfesorRegistrar.js";
+import { renderProfesorConsulta } from "./renderProfesorConsulta.js";
+import { renderProfesorPasarAsistencia } from "./renderProfesorPasarAsistencia.js";
+import { renderProfesorAsistenciaConsultar } from "./renderProfesorAsistenciaConsulta.js";
+import { ProfesorCrearAsistencia } from "./ProfesorCrearAsistencia.js";
 
-const btnRegistrarAsistencia =
-document.getElementById(
-"btnRegistrarAsistencia"
-);
+export function profesorPanel() {
 
-const contenidoPrincipal =
-document.getElementById(
-"contenidoPrincipal"
-);
+    const botones = document.querySelectorAll(".sidebar-btn");
+    const secciones = document.querySelectorAll(".content-section");
 
-const btnEliminarAsistencia=
-document.getElementById(
-"btnEliminarAsistencia"
-);
+    const consultarContainer = document.querySelector("#Consultar");
+    const registrarContainer = document.querySelector("#Registrar");
 
+    const dni = localStorage.getItem("dni");
 
+    let idClase = null;
 
+    botones.forEach((boton, index) => {
 
-/* EVENTOS */
+        boton.addEventListener("click", async () => {
 
-btnEliminarAsistencia.addEventListener(
-"click",
-mostrarEliminarAsistencia
-);
+            botones.forEach(b => b.classList.remove("active"));
+            secciones.forEach(s => s.classList.add("hidden"));
 
-btnConsultar.addEventListener(
-"click",
-mostrarEntrenamientos
-);
+            boton.classList.add("active");
+            secciones[index].classList.remove("hidden");
 
-btnRegistrarAsistencia.addEventListener(
-"click",
-mostrarPantallaAsistencia
-);
+            const text = boton.textContent.trim();
 
+            // =========================
+            // VER CLASES
+            // =========================
+            if (text === "Ver clases asignadas") {
 
+                const clases = await getData(`Clase/clases/${dni}`);
 
-function mostrarEntrenamientos(){
+                consultarContainer.innerHTML =
+                    renderProfesorConsulta(clases);
 
-contenidoPrincipal.innerHTML=`
+                consultarContainer.onclick = async (e) => {
 
-<header class="topbar">
+                    const btn = e.target.closest(".profesor-btn");
+                    if (!btn) return;
 
-<h1>
-Panel Entrenador
-</h1>
+                    const id = btn.dataset.id;
 
-<div class="user">
-👤 Admin
-</div>
+                    const alumnos = await getData( `Clase/inscriptos/${id}`);
 
-</header>
+                    consultarContainer.innerHTML =
+                        renderProfesorAsistenciaConsultar(alumnos);
+                };
+            }
 
-<section class="dashboard-entrenamientos">
+            // =========================
+            // PASAR ASISTENCIA
+            // =========================
+            if (text === "Pasar asistencia") {
 
-<div class="perfil">
+                const clases = await getData(`Clase/clases/${dni}`);
 
-<div class="info">
+                registrarContainer.innerHTML =
+                    renderProfesorRegistrar(clases);
 
-<h2>
-Mis entrenamientos
-</h2>
+               registrarContainer.onclick = async (e) => {
 
-<p>
-Entrenamientos asignados
-</p>
+    // =========================
+    // ABRIR CLASE
+    // =========================
+    const btnClase = e.target.closest(".admin-btn[data-id]");
 
-</div>
+    if (btnClase && btnClase.classList.contains("Consultar") === false
+        && btnClase.classList.contains("Presente") === false
+        && btnClase.classList.contains("Ausente") === false) {
 
-</div>
+        const idClase = btnClase.dataset.id;
 
-<div class="contenedor-entrenamientos">
+        const alumnos = await getData(
+            `Asistencia/asistencias/clase/${idClase}`
+        );
 
-</div>
+        registrarContainer.innerHTML =
+            renderProfesorPasarAsistencia(alumnos);
 
-</section>
+        return;
+    }
 
-`;
+    // =========================
+    // PRESENTE
+    // =========================
+    const btnPresente = e.target.closest(".Presente");
 
-renderizarEntrenamientos();
+            if (btnPresente) {
 
-}
+                const idAsistencia = Number(btnPresente.dataset.id);
+                const dniCliente = Number(btnPresente.dataset.dni);
 
+                await ProfesorCrearAsistencia(
+                    idAsistencia,
+                    dniCliente,
+                    true
+                );
 
-function mostrarPantallaAsistencia(){
+                const card = btnPresente.closest(".admi-card");
+                if (!card) return;
 
-contenidoPrincipal.innerHTML=`
+                // eliminar botones
+                card.querySelectorAll(".admin-btn").forEach(b => b.remove());
 
-<header class="topbar">
+                // eliminar estado anterior
+                card.querySelector(".estado-asistencia")?.remove();
 
-<h1>
+                // crear estado nuevo
+                const estado = document.createElement("div");
+                estado.className = "estado-asistencia presente";
+                estado.textContent = "✓ Asistió";
 
-Registrar asistencia
+                card.appendChild(estado);
 
-</h1>
+                return;
+            }
+            // =========================
+            // AUSENTE
+            // =========================
+            const btnAusente = e.target.closest(".Ausente");
 
-<div class="user">
+            if (btnAusente) {
 
-👤 Admin
+                const idAsistencia = Number(btnAusente.dataset.id);
+                const dniCliente = Number(btnAusente.dataset.dni);
 
-</div>
+                await ProfesorCrearAsistencia(
+                    idAsistencia,
+                    dniCliente,
+                    false
+                );
 
-</header>
+                const card = btnAusente.closest(".admi-card");
+                if (!card) return;
 
-<section class="dashboard-entrenamientos">
+                // eliminar botones
+                card.querySelectorAll(".admin-btn").forEach(b => b.remove());
 
-<div class="perfil">
+                // eliminar estado anterior
+                card.querySelector(".estado-asistencia")?.remove();
 
-<div class="info">
+                // crear estado nuevo
+                const estado = document.createElement("div");
+                estado.className = "estado-asistencia ausente";
+                estado.textContent = "✗ Ausente";
 
-<h2>
+                card.appendChild(estado);
 
-Seleccionar entrenamiento
-
-</h2>
-
-<p>
-
-Elegí un entrenamiento para pasar asistencia
-
-</p>
-
-</div>
-
-</div>
-
-<div class="contenedor-entrenamientos">
-
-</div>
-
-</section>
-
-`;
-
-renderizarEntrenamientosAsistencia();
-
-}
-
-function mostrarEliminarAsistencia(){
-
-contenidoPrincipal.innerHTML=`
-
-<header class="topbar">
-
-<h1>
-
-Eliminar asistencia
-
-</h1>
-
-<div class="user">
-
-👤 Admin
-
-</div>
-
-</header>
-
-<section class="dashboard-entrenamientos">
-
-<div class="perfil">
-
-<div class="info">
-
-<h2>
-
-Seleccionar entrenamiento
-
-</h2>
-
-<p>
-
-Elegí un entrenamiento
-
-</p>
-
-</div>
-
-</div>
-
-<div class="contenedor-entrenamientos">
-
-</div>
-
-</section>
-
-`;
-
-renderizarEntrenamientosEliminar();
-
+                return;
+            }
+        };
+            }
+        });
+    });
 }

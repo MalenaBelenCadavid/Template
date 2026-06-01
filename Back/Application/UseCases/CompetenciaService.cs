@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Application.DTOs.Request.Competencias;
 using Application.DTOs.Response.Competencias;
 using Application.DTOs.Response.Equipos;
@@ -62,10 +58,33 @@ namespace Application.UseCases
 
             return new CompetenciaResponse
             {
+                competenciaId = competencia.IdCompetencia,
                 Nombre = competencia.Nombre,
                 Cupos = competencia.Cupos,
                 Descripcion = competencia.Descripcion,
-                Precio = competencia.Precio
+                Precio = competencia.Precio,
+                Equipos = competencia.Equipos.Select(e => new EquipoResponse
+                {
+                    id = e.IdEquipo,
+                    nombre = e.Nombre,
+                    victorias=e.Victorias,
+                    derrotas=e.Derrotas,
+                    estado=e.Estado,                   
+                }).ToList(),
+                Partidos = competencia.Partidos.Select(p => new PartidoResponse
+                {
+                    IdPartido = p.IdPartido,
+                    IdCompetencia = p.IdCompetencia,
+                    IdEquipoLocal = p.IdEquipoLocal,
+                    NombreLocal=p.EquipoLocal.Nombre,
+                    IdEquipoVis = p.IdEquipoVis,
+                    NombreVisitante=p.EquipoVis.Nombre,
+                    GolesLocal = p.GolesLocal,
+                    GolesVis = p.GolesVis,
+                    HoraInicio = p.HoraInicio,
+                    HoraFin = p.HoraFin,
+                    Estado = p.Estado
+                }).ToList()
 
             };
         }
@@ -110,6 +129,7 @@ namespace Application.UseCases
 
             return lista.Select(c => new CompetenciaResponse
             {
+                competenciaId =c.IdCompetencia,
                 Nombre = c.Nombre,
                 Cupos = c.Cupos - c.Equipos.Count(),
                 Descripcion = c.Descripcion,
@@ -124,7 +144,9 @@ namespace Application.UseCases
                     IdPartido = p.IdPartido,
                     IdCompetencia = p.IdCompetencia,
                     IdEquipoLocal = p.IdEquipoLocal,
+                    NombreLocal=p.EquipoLocal.Nombre,
                     IdEquipoVis = p.IdEquipoVis,
+                    NombreVisitante=p.EquipoVis.Nombre,
                     GolesLocal = p.GolesLocal,
                     GolesVis = p.GolesVis,
                     HoraInicio = p.HoraInicio,
