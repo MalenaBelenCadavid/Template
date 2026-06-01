@@ -15,5 +15,6 @@ namespace Application.DTOs.Response.Partidos
             public DateTime HoraInicio { get; set; }
             public DateTime HoraFin { get; set; }
             public string Estado { get; set; } 
+        public int? IdSigPartido { get; set; }
     }
 }

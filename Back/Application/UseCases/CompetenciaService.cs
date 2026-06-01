@@ -83,7 +83,8 @@ namespace Application.UseCases
                     GolesVis = p.GolesVis,
                     HoraInicio = p.HoraInicio,
                     HoraFin = p.HoraFin,
-                    Estado = p.Estado
+                    Estado = p.Estado,
+                    IdSigPartido = p.IdSigPartido
                 }).ToList()
 
             };
@@ -144,14 +145,15 @@ namespace Application.UseCases
                     IdPartido = p.IdPartido,
                     IdCompetencia = p.IdCompetencia,
                     IdEquipoLocal = p.IdEquipoLocal,
-                    NombreLocal = p.EquipoLocal.Nombre,
+                    NombreLocal = p.EquipoLocal?.Nombre ?? "a confirmar",
                     IdEquipoVis = p.IdEquipoVis,
-                    NombreVisitante = p.EquipoVis.Nombre,
+                    NombreVisitante = p.EquipoVis?.Nombre ?? "a confirmar",
                     GolesLocal = p.GolesLocal,
                     GolesVis = p.GolesVis,
                     HoraInicio = p.HoraInicio,
                     HoraFin = p.HoraFin,
-                    Estado = p.Estado
+                    Estado = p.Estado,
+                    IdSigPartido = p.IdSigPartido
                 }).ToList()
             });
         }

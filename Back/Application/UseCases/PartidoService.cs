@@ -87,7 +87,7 @@ public class PartidoService : IPartidoService
         if (request.GolesLocal > request.GolesVis) 
         {
            var equipoLoc = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
-           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoVis);
            equipoLoc.Victorias++;
            equipoVis.Derrotas++;
            await _equipoCommand.ModificarEquipo(equipoLoc);
@@ -97,7 +97,7 @@ public class PartidoService : IPartidoService
         if (request.GolesLocal < request.GolesVis)
         {
            var equipoLoc = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
-           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoLocal);
+           var equipoVis = await _IEquipoQuery.ObtenerEquipoPorId(request.idEquipoVis);
            equipoVis.Victorias++;
            equipoLoc.Derrotas++;
            await _equipoCommand.ModificarEquipo(equipoLoc);
@@ -160,7 +160,8 @@ public class PartidoService : IPartidoService
             GolesLocal = partido.GolesLocal,
             GolesVis = partido.GolesVis,
             HoraInicio = partido.HoraInicio,
-            HoraFin = partido.HoraFin
+            HoraFin = partido.HoraFin,
+            IdSigPartido = partido.SigPartido?.IdPartido
         });
     }
 }
