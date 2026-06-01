@@ -13,6 +13,7 @@ namespace Application.DTOs.Response.Equipos
         public string nombre { get; set; }
         public int victorias { get; set; }
         public int derrotas { get; set; }
+        public bool estado { get; set; }
     }
 }
 

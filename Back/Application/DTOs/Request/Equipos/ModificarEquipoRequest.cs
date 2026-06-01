@@ -14,5 +14,6 @@ namespace Application.DTOs.Request.Equipos
         public int victorias { get; set; }
         public int derrotas { get; set; }
         public int idCompetencia { get; set; }
+        public bool estado { get; set; }
     }
 }

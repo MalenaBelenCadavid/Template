@@ -9,6 +9,7 @@ namespace Application.DTOs.Request.Competencias
     public class AgregarEquipoRequest
     {
         public string nombre { get; set; }
+        public bool estado { get; set; } = true;
     }
 
 }
