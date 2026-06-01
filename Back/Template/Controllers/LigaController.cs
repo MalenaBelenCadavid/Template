@@ -34,5 +34,18 @@ namespace Template.Controllers
                 await _serviceliga.CargarResultado(idPartido, golesLocal, golesVis, ct);
                 return NoContent();
             }
+
+        [HttpDelete("EliminarFixture/{idLiga}")]
+            public async Task<IActionResult> EliminarFixture(int idLiga, CancellationToken ct)
+            {
+                await _serviceliga.EliminarFixture(idLiga, ct);
+                return NoContent();
+            }
+            [HttpPost("RehacerFixture/{idLiga}")]
+            public async Task<IActionResult> RehacerFixture(int idLiga, CancellationToken ct)
+            {
+                await _serviceliga.RehacerFixture(idLiga, ct);
+                return NoContent();
         }
     }
+}
