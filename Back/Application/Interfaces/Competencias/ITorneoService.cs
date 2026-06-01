@@ -12,6 +12,9 @@ namespace Application.Interfaces.Competencias
           Task CargarResultado(int IdPartido, int GolesLocal, int GolesVis, CancellationToken ct = default);
           Task DescalificarEquipo(int idEquipo, CancellationToken ct = default);
         Task<ObtenerCuadroResponse> ObtenerCuadroTorneo(int idTorneo, CancellationToken ct = default);
+        Task EliminarFixture(int idTorneo, CancellationToken ct = default);
+            Task RehacerFixture(int idTorneo, CancellationToken ct = default);
+
     }
 
 }

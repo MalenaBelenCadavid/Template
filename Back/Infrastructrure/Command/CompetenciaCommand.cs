@@ -44,7 +44,7 @@ namespace Infrastructure.Command
             if (!competencia)
                 throw new ExceptionNotFound("Competencia no encontrada");
 
-            
+
             await _context.Equipos.AddAsync(equipo, ct);
             await _context.SaveChangesAsync(ct);
             return equipo.IdEquipo;
@@ -62,6 +62,14 @@ namespace Infrastructure.Command
                 throw new ExceptionNotFound("Competencia no encontrada");
             competencia.Cupos--;
             _context.Competencias.Update(competencia);
+            await _context.SaveChangesAsync(ct);
+        }
+        public async Task EliminarPartidos(int idComptetencia, CancellationToken ct = default)
+        {
+            var partidos = await _context.Partidos
+                .Where(p => p.IdCompetencia == idComptetencia)
+                .ToListAsync(ct);
+            _context.Partidos.RemoveRange(partidos);
             await _context.SaveChangesAsync(ct);
         }
     }
