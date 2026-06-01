@@ -79,8 +79,8 @@ namespace Application.UseCases
             if (partido.IdEquipoLocal == 0 || partido.IdEquipoVis == 0)
                 throw new ExceptionConflict("El partido no tiene equipos asignados");
 
-            var equipoLocal = await _equipoQuery.ObtenerEquipoPorId(partido.IdEquipoLocal, ct);
-            var equipoVis = await _equipoQuery.ObtenerEquipoPorId(partido.IdEquipoVis, ct);
+            var equipoLocal = await _equipoQuery.ObtenerEquipoPorId(partido.IdEquipoLocal.Value, ct);
+            var equipoVis = await _equipoQuery.ObtenerEquipoPorId(partido.IdEquipoVis.Value, ct);
 
             if (equipoLocal is null || equipoVis is null)
                 throw new ExceptionConflict("Uno o ambos equipos del partido no existen");
@@ -109,14 +109,14 @@ namespace Application.UseCases
             {
                 if (GolesLocal > GolesVis)
                 {
-                    if (partido.SigPartido.IdEquipoLocal is null)
+                    if (partido.SigPartido.IdEquipoLocal==null)
                     {
-                        partido.SigPartido.IdEquipoLocal = partido.IdEquipoLocal ?? partido.SigPartido.IdEquipoLocal;
+                        partido.SigPartido.IdEquipoLocal = partido.IdEquipoLocal;
                         await DescalificarEquipo(partido.IdEquipoVis.Value, ct);
                     }
                     else
                     {
-                        partido.SigPartido.IdEquipoVis = partido.IdEquipoLocal ?? partido.SigPartido.IdEquipoVis;
+                        partido.SigPartido.IdEquipoVis = partido.IdEquipoLocal;
                         await DescalificarEquipo(partido.IdEquipoVis.Value, ct);
                     }
 

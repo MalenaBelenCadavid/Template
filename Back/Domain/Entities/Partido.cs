@@ -8,8 +8,8 @@ namespace Domain.Entities
 
         public int Fecha { get; set; }
 
-        public int IdEquipoLocal { get; set; }
-        public int IdEquipoVis {  get; set; }
+        public int? IdEquipoLocal { get; set; }
+        public int? IdEquipoVis {  get; set; }
         public int? GolesLocal { get; set; } 
         public int? GolesVis { get; set; }
 
