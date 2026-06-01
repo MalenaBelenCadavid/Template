@@ -1,6 +1,6 @@
 // login.js
 import { Login } from "../PostCliente.js";
-
+const SESSION_KEYS = ["dni", "nombre", "logged", "Adminlogged", "Profesorlogged", "Entrenadorlogged"];
 export async function handleLogin() {
 
   const email = document.getElementById('email');

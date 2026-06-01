@@ -103,7 +103,7 @@ namespace Application.UseCases
             clienteExistente.Correo = request.Correo;
             clienteExistente.Localidad = request.Localidad;
             clienteExistente.Pais = request.Pais;
-            clienteExistente.EsSocio = request.EsSocio;
+            clienteExistente.EsSocio = (bool)request.EsSocio;
 
             var clienteActualizado = await _clienteCommand.ModificarCliente(clienteExistente);
 

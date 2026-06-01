@@ -216,6 +216,9 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDescuento"));
 
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -226,6 +229,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("TipoDescuento")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<double>("Valor")
                         .HasColumnType("float");
@@ -423,10 +431,10 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IdCompetencia")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEquipoLocal")
+                    b.Property<int?>("IdEquipoLocal")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEquipoVis")
+                    b.Property<int?>("IdEquipoVis")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdSigPartido")
@@ -566,6 +574,35 @@ namespace Infrastructure.Migrations
                     b.HasKey("IdTipoCancha");
 
                     b.ToTable("TipoCancha", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            IdTipoCancha = 1,
+                            Capacidad = 10,
+                            Duracion = 60,
+                            Nombre = "Fútbol 5",
+                            Precio = 18000,
+                            Superficie = "Césped sintético"
+                        },
+                        new
+                        {
+                            IdTipoCancha = 2,
+                            Capacidad = 14,
+                            Duracion = 90,
+                            Nombre = "Fútbol 7",
+                            Precio = 30000,
+                            Superficie = "Césped sintético"
+                        },
+                        new
+                        {
+                            IdTipoCancha = 3,
+                            Capacidad = 22,
+                            Duracion = 120,
+                            Nombre = "Fútbol 11",
+                            Precio = 55000,
+                            Superficie = "Césped natural"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
@@ -842,14 +879,12 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Equipo", "EquipoLocal")
                         .WithMany()
                         .HasForeignKey("IdEquipoLocal")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.Equipo", "EquipoVis")
                         .WithMany()
                         .HasForeignKey("IdEquipoVis")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.Partido", "SigPartido")
                         .WithMany()

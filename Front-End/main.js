@@ -7,6 +7,8 @@ import {CreateAllActivitiesCards} from "./js/Actividades/Cards/RenderActivities.
 import { entrenadorPanel } from "./js/entrenador/entrenador.js";
 import { profesorPanel } from "./js/profesor/profesor.js";
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
     actualizarNavbar();
   const page = window.location.pathname.split("/").pop();
@@ -34,5 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(page === "profesor.html"){
       profesorPanel();
     }  
+
 
 });

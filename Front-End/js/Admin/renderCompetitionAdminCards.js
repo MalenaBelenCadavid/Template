@@ -167,7 +167,7 @@ export function RenderCompetitionAdminCards(competiciones) {
         const sinEquipos = (c.equipos?.length ?? 0) === 0;
         const tienePartidos = Array.isArray(c.partidos) && c.partidos.length > 0;
 
-        const puedeGenerarFixture = c.fixtureGenerado === false && tieneEquipos;
+        const puedeGenerarFixture = tienePartidos && tieneEquipos;
 
         return `
           <div class="admin-card" data-id="${c.competenciaId}">
@@ -216,9 +216,9 @@ export function RenderCompetitionAdminCards(competiciones) {
               <button 
                 class="admin-btn admin-btn-fixture"
                 data-id="${c.competenciaId}"
-                data-mode="${puedeGenerarFixture ? "generate" : "view"}"
+                data-mode="${puedeGenerarFixture ? "view":"generate" }"
               >
-                ${puedeGenerarFixture ? "Generar Fixture" : "Ver fixture"}
+                ${puedeGenerarFixture ?   "Ver fixture":"Generar Fixture"}
               </button>
 
               <button 

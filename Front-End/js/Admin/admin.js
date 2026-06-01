@@ -25,6 +25,7 @@ import { eliminarProfesional } from "./eliminarProfesional.js";
 import { renderAccionesCobro } from "./cobrosBtns.js";
 import { renderAccionesRecibo } from "./recibosBtns.js";
 import { editarCompetencia } from "./Modals/editarCompetencia.js";
+import { renderMetricas } from "./Modals/renderMetricas.js";
 
 
 
@@ -49,10 +50,10 @@ botones.forEach((boton, index) => {
     const seccionAct = boton.textContent.trim();;
 
 
-
  if(seccionAct == "Dashboard")
   {
-        console.log("AAAA")
+    const container = document.querySelector("#dashboard");
+    await renderMetricas(container);
   }
 
  if (seccionAct == "Canchas")
@@ -575,13 +576,11 @@ if (seccionAct == "Competencias") {
         console.error("No existe el container #cobrosYrecibos");
         return;
       }
-  
-       if(seccionAct == "Descuentos")
-       {
-         window.location.href = "./descuentos.html";
-       }
-
       container.innerHTML = renderAccionesCobro() + renderAccionesRecibo();
+    }
+  if(seccionAct == "Descuentos")
+    {
+    window.location.href = "Descuentos.html";
     }
 
 
@@ -592,6 +591,6 @@ if (seccionAct == "Competencias") {
   });
 
 });
-
+botones[0].click();
 }
 

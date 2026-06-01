@@ -57,7 +57,7 @@ export function RenderTcCards(tipos)
               </span>
 
               <span class="admin-info-value">
-                ${tipo.duracion}h
+                ${tipo.duracion} mins
               </span>
 
             </div>

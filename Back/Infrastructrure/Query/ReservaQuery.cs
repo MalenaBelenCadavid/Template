@@ -25,6 +25,30 @@ namespace Infrastructure.Query
             return await _context.Reservas.AnyAsync(r =>r.IdCancha == canchaId && r.Fecha == fecha,ct);
         }
 
+        public async Task<int> IngresosPorReservas(CancellationToken ct = default)
+        {
+            return (int)await _context.Reservas.SumAsync(r => r.MontoTotal, ct);
+        }
+        public async Task<List<Cancha>> CanchasMasReservadas(CancellationToken ct = default)
+        {
+            var query = await _context.Reservas
+                .GroupBy(r => r.IdCancha)
+                .Select(g => new
+                {
+                    IdCancha = g.Key,
+                    Cantidad = g.Count()
+                })
+                .OrderByDescending(x => x.Cantidad)
+                .Join(_context.Canchas.Include(c => c.TipoCancha),
+                    r => r.IdCancha,
+                    c => c.IdCancha,
+                    (r, c) => c
+                )
+                .ToListAsync(ct);
+
+            return query;
+        }
+
         public async Task<List<Reserva>> ListarPorCanchaYFecha(int idCancha, DateOnly Fecha, CancellationToken ct = default)
         {
             return await _context.Reservas.Where(res=>res.IdCancha==idCancha && res.Fecha==Fecha).ToListAsync(ct);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260531035859_assitenciaFix")]
-    partial class assitenciaFix
+    [Migration("20260601034304_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,13 +42,16 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("IdEntrenamiento")
                         .HasColumnType("int");
 
-                    b.Property<int>("NroActividad")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("Presente")
                         .HasColumnType("bit");
 
                     b.HasKey("IdAsistencia");
+
+                    b.HasIndex("DniCliente");
+
+                    b.HasIndex("IdClase");
+
+                    b.HasIndex("IdEntrenamiento");
 
                     b.ToTable("Asistencia", (string)null);
                 });
@@ -216,6 +219,9 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDescuento"));
 
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -226,6 +232,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("TipoDescuento")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<double>("Valor")
                         .HasColumnType("float");
@@ -423,10 +434,10 @@ namespace Infrastructure.Migrations
                     b.Property<int>("IdCompetencia")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEquipoLocal")
+                    b.Property<int?>("IdEquipoLocal")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEquipoVis")
+                    b.Property<int?>("IdEquipoVis")
                         .HasColumnType("int");
 
                     b.Property<int?>("IdSigPartido")
@@ -566,6 +577,35 @@ namespace Infrastructure.Migrations
                     b.HasKey("IdTipoCancha");
 
                     b.ToTable("TipoCancha", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            IdTipoCancha = 1,
+                            Capacidad = 10,
+                            Duracion = 60,
+                            Nombre = "Fútbol 5",
+                            Precio = 18000,
+                            Superficie = "Césped sintético"
+                        },
+                        new
+                        {
+                            IdTipoCancha = 2,
+                            Capacidad = 14,
+                            Duracion = 90,
+                            Nombre = "Fútbol 7",
+                            Precio = 30000,
+                            Superficie = "Césped sintético"
+                        },
+                        new
+                        {
+                            IdTipoCancha = 3,
+                            Capacidad = 22,
+                            Duracion = 120,
+                            Nombre = "Fútbol 11",
+                            Precio = 55000,
+                            Superficie = "Césped natural"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Usuario", b =>
@@ -679,6 +719,31 @@ namespace Infrastructure.Migrations
                     b.HasBaseType("Domain.Entities.Profesional");
 
                     b.ToTable("Profesores");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Asistencia", b =>
+                {
+                    b.HasOne("Domain.Entities.Cliente", "Cliente")
+                        .WithMany("Asistencias")
+                        .HasForeignKey("DniCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Clase", "Clase")
+                        .WithMany("Asistencias")
+                        .HasForeignKey("IdClase")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.Entrenamiento", "Entrenamiento")
+                        .WithMany("Asistencias")
+                        .HasForeignKey("IdEntrenamiento")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Clase");
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Entrenamiento");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cancha", b =>
@@ -817,14 +882,12 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Equipo", "EquipoLocal")
                         .WithMany()
                         .HasForeignKey("IdEquipoLocal")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.Equipo", "EquipoVis")
                         .WithMany()
                         .HasForeignKey("IdEquipoVis")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Entities.Partido", "SigPartido")
                         .WithMany()
@@ -920,6 +983,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Clase", b =>
                 {
+                    b.Navigation("Asistencias");
+
                     b.Navigation("Inscripto");
                 });
 
@@ -934,6 +999,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Entrenamiento", b =>
                 {
+                    b.Navigation("Asistencias");
+
                     b.Navigation("Inscriptos");
                 });
 
@@ -956,6 +1023,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
                 {
+                    b.Navigation("Asistencias");
+
                     b.Navigation("Cobros");
 
                     b.Navigation("Equipos");
