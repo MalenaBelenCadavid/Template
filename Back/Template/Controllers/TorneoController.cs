@@ -34,5 +34,23 @@ namespace Template.Controllers
             var cuadro = await _serviceTorneo.ObtenerCuadroTorneo(idTorneo, ct);
             return Ok(cuadro);
         }
+            [HttpPut("DescalificarEquipo")]
+           public async Task<IActionResult> DescalificarEquipo(int idEquipo, CancellationToken ct)
+        {
+            await _serviceTorneo.DescalificarEquipo(idEquipo, ct);
+            return NoContent();
+        }
+        [HttpDelete("EliminarEquipos")]
+        public async Task<IActionResult> EliminarEquipos(int idTorneo, CancellationToken ct)
+        {
+            await _serviceTorneo.EliminarFixture(idTorneo, ct);
+            return NoContent();
+        }
+        [HttpPost("RehacerFixture")]
+            public async Task<IActionResult> RehacerFixture(int idTorneo, CancellationToken ct)
+        {
+            await _serviceTorneo.RehacerFixture(idTorneo, ct);
+            return NoContent();
+        }
     }
 }

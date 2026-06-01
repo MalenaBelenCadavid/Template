@@ -17,6 +17,7 @@ namespace Application.Interfaces.Competencias
         Task ModificarCompetencia(int idCompetencia,ModificarCompetenciaRequest competencia, CancellationToken ct = default);
         Task<int> AgregarEquipo(AgregarEquipoRequest request,int idCompetencia, CancellationToken ct = default);
         Task EliminarCompetencia(int idCompetencia, CancellationToken ct = default);
+        Task EliminarPartidos(int idCompetencia, CancellationToken ct = default);
 
         Task<CompetenciaResponse?> ObtenerCompetenciaPorId(int id, CancellationToken ct = default);
         Task<IEnumerable<CompetenciaResponse?>> ObtenerTodasLasCompetencias(CancellationToken ct = default);

@@ -27,7 +27,7 @@ namespace Application.UseCases
                 "Torneo" => new Torneo(),
                 _ => throw new ArgumentException("Formato invalido")
             };
-            if (request.tipo== "Torneo") { if (!BitOperations.IsPow2((uint)request.cupos)) throw new ArgumentException("El numero de cupos debe ser una potencia de 2"); }
+            if (request.tipo == "Torneo") { if (!BitOperations.IsPow2((uint)request.cupos)) throw new ArgumentException("El numero de cupos debe ser una potencia de 2"); }
 
             competencia.Nombre = request.nombre;
             competencia.Descripcion = request.descripcion;
@@ -67,18 +67,18 @@ namespace Application.UseCases
                 {
                     id = e.IdEquipo,
                     nombre = e.Nombre,
-                    victorias=e.Victorias,
-                    derrotas=e.Derrotas,
-                    estado=e.Estado,                   
+                    victorias = e.Victorias,
+                    derrotas = e.Derrotas,
+                    estado = e.Estado,
                 }).ToList(),
                 Partidos = competencia.Partidos.Select(p => new PartidoResponse
                 {
                     IdPartido = p.IdPartido,
                     IdCompetencia = p.IdCompetencia,
                     IdEquipoLocal = p.IdEquipoLocal,
-                    NombreLocal=p.EquipoLocal.Nombre,
+                    NombreLocal = p.EquipoLocal.Nombre,
                     IdEquipoVis = p.IdEquipoVis,
-                    NombreVisitante=p.EquipoVis.Nombre,
+                    NombreVisitante = p.EquipoVis.Nombre,
                     GolesLocal = p.GolesLocal,
                     GolesVis = p.GolesVis,
                     HoraInicio = p.HoraInicio,
@@ -115,7 +115,7 @@ namespace Application.UseCases
             var equipo = new Equipo
             {
                 Nombre = request.nombre,
-                Estado= request.estado
+                Estado = request.estado
             };
 
             await _competenciaCommand.AgregarEquipo(equipo, idCompetencia, ct);
@@ -129,7 +129,7 @@ namespace Application.UseCases
 
             return lista.Select(c => new CompetenciaResponse
             {
-                competenciaId =c.IdCompetencia,
+                competenciaId = c.IdCompetencia,
                 Nombre = c.Nombre,
                 Cupos = c.Cupos - c.Equipos.Count(),
                 Descripcion = c.Descripcion,
@@ -144,9 +144,9 @@ namespace Application.UseCases
                     IdPartido = p.IdPartido,
                     IdCompetencia = p.IdCompetencia,
                     IdEquipoLocal = p.IdEquipoLocal,
-                    NombreLocal=p.EquipoLocal.Nombre,
+                    NombreLocal = p.EquipoLocal.Nombre,
                     IdEquipoVis = p.IdEquipoVis,
-                    NombreVisitante=p.EquipoVis.Nombre,
+                    NombreVisitante = p.EquipoVis.Nombre,
                     GolesLocal = p.GolesLocal,
                     GolesVis = p.GolesVis,
                     HoraInicio = p.HoraInicio,
@@ -184,6 +184,10 @@ namespace Application.UseCases
         public async Task<bool> CompetenciaExiste(int idcompetencia, CancellationToken ct = default)
         {
             return await _competenciaQuery.CompetenciaExiste(idcompetencia, ct);
+        }
+        public async Task EliminarPartidos(int idCompetencia, CancellationToken ct = default)
+        {
+            await _competenciaCommand.EliminarPartidos(idCompetencia, ct);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Application.UseCases
         private readonly IPartidoQuery _partidoQuery;
         private readonly IEquipoQuery _equipoQuery;
         private readonly IEquipoCommand _equipoCommand;
-        public TorneoService(ICompetenciaCommand competenciaCommand, ICompetenciaQuery competenciaQuery, IPartidoCommand partidoCommand,IPartidoQuery partidoQuery,IEquipoQuery equipoQuery, IEquipoCommand equipoCommand) : base(competenciaCommand, competenciaQuery)
+        public TorneoService(ICompetenciaCommand competenciaCommand, ICompetenciaQuery competenciaQuery, IPartidoCommand partidoCommand, IPartidoQuery partidoQuery, IEquipoQuery equipoQuery, IEquipoCommand equipoCommand) : base(competenciaCommand, competenciaQuery)
         {
             _partidoCommand = partidoCommand;
             _partidoQuery = partidoQuery;
@@ -67,6 +67,21 @@ namespace Application.UseCases
         public async Task AgregarPartidos(List<Partido> fixture, CancellationToken ct = default)
         {
             await _competenciaCommand.AgregarPartidos(fixture, ct);
+        }
+
+        public async Task RehacerFixture(int idTorneo, CancellationToken ct = default)
+        {
+            await EliminarFixture(idTorneo, ct);
+            await GenerarFixture(idTorneo, ct);
+        }
+        public async Task EliminarFixture(int idTorneo, CancellationToken ct = default)
+        {
+            var competencia = await _competenciaQuery.ObtenerCompetenciaPorId(idTorneo, ct);
+            if (competencia is null)
+                throw new ExceptionNotFound("Competencia no encontrada");
+            if (competencia is not Torneo)
+                throw new ExceptionBadRequest("La competencia no es torneo");
+            await _competenciaCommand.EliminarPartidos(idTorneo, ct);
         }
 
         public async Task CargarResultado(int IdPartido, int GolesLocal, int GolesVis, CancellationToken ct = default)
@@ -219,5 +234,6 @@ namespace Application.UseCases
                 _ => $"Ronda de {cantidadPartidos * 2}"
             };
         }
+
     }
-    }
+}
