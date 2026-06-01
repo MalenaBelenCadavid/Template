@@ -8,11 +8,11 @@ using Application.Interfaces.Partidos;
 namespace Application.UseCases
 {
 
-    public class LigaService: CompetenciaService,ILigaService 
+    public class LigaService : CompetenciaService, ILigaService
     {
         private readonly IPartidoQuery _partidoQuery;
         private readonly IPartidoCommand _partidoCommand;
-        public LigaService(ICompetenciaCommand competenciaCommand, ICompetenciaQuery competenciaQuery, IPartidoQuery partidoQuery, IPartidoCommand partidoCommand):base(competenciaCommand, competenciaQuery)
+        public LigaService(ICompetenciaCommand competenciaCommand, ICompetenciaQuery competenciaQuery, IPartidoQuery partidoQuery, IPartidoCommand partidoCommand) : base(competenciaCommand, competenciaQuery)
         {
             _partidoQuery = partidoQuery;
             _partidoCommand = partidoCommand;
@@ -21,9 +21,9 @@ namespace Application.UseCases
         public async Task GenerarFixture(int idLiga, CancellationToken ct = default)
         {
             var competencia = await _competenciaQuery.ObtenerCompetenciaPorId(idLiga, ct);
-           
+
             if (competencia is null) throw new KeyNotFoundException($"No se encontro competencias con id: {idLiga}");
-            if(competencia is not Liga liga)
+            if (competencia is not Liga liga)
             { throw new InvalidOperationException($"La competencia con id: {idLiga} no es una liga."); }
             if (competencia.Partidos.Any())
             {
@@ -76,14 +76,16 @@ namespace Application.UseCases
             if (competencia is null) { throw new KeyNotFoundException($"No se encontro competencias con id: {idLiga}"); }
             var partidos = competencia.Partidos.Where(partido => partido.Estado == "Finalizado").ToList();
 
-            var equipos =  competencia.Equipos.Select(equipo => new TablaLigaResponse { IdEquipo = equipo.IdEquipo,
+            var equipos = competencia.Equipos.Select(equipo => new TablaLigaResponse
+            {
+                IdEquipo = equipo.IdEquipo,
                 Equipo = equipo.Nombre,
             }).ToList();
 
             foreach (var partido in partidos)
-            { 
-                var equipoLocal= equipos.First(e => e.IdEquipo == partido.IdEquipoLocal);
-                var equipoVis= equipos.First(e => e.IdEquipo == partido.IdEquipoVis);
+            {
+                var equipoLocal = equipos.First(e => e.IdEquipo == partido.IdEquipoLocal);
+                var equipoVis = equipos.First(e => e.IdEquipo == partido.IdEquipoVis);
 
                 equipoLocal.PJ++;
                 equipoVis.PJ++;
@@ -115,7 +117,7 @@ namespace Application.UseCases
                     equipoVis.Puntos += 1;
                 }
 
-                
+
             }
             return equipos.OrderByDescending(e => e.Puntos)
                     .ThenByDescending(e => e.GF - e.GC)
@@ -132,7 +134,7 @@ namespace Application.UseCases
             {
                 throw new InvalidOperationException($"La competencia {competencia.Nombre} no tiene partidos para eliminar.");
             }
-            await _competenciaCommand.EliminarPartidos(int idLiga, ct);
+            await _competenciaCommand.EliminarPartidos(idLiga, ct);
 
         }
         public async Task RehacerFixture(int idLiga, CancellationToken ct = default)
@@ -140,4 +142,5 @@ namespace Application.UseCases
             await EliminarFixture(idLiga, ct);
             await GenerarFixture(idLiga, ct);
         }
+    }
 }
