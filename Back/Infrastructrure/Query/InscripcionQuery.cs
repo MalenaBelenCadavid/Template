@@ -41,5 +41,10 @@ namespace Infrastructure.Query
         {
             return await _context.Inscripciones.AnyAsync(i => i.IdAct == idActividad && i.DniCliente == dni,ct);
         }
+
+        public async Task<int> IngresosPorInscripciones(CancellationToken ct = default)
+        {
+            return (int)await _context.Inscripciones.SumAsync(i => i.PrecioInscr, ct);
+        }
     }
 }

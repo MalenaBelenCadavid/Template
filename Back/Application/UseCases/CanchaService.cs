@@ -413,11 +413,11 @@ namespace Application.UseCases
         }
 
 
-        private List<HorarioCancha> GenerarSlots(DayOfWeek dia,TimeSpan inicio,TimeSpan fin,int duracionHoras,int canchaId)
+        private List<HorarioCancha> GenerarSlots(DayOfWeek dia,TimeSpan inicio,TimeSpan fin,int duracionMinutos,int canchaId)
         {
             var slots = new List<HorarioCancha>();
 
-            var duracion = TimeSpan.FromHours(duracionHoras);
+            var duracion = TimeSpan.FromMinutes(duracionMinutos);
             var actual = inicio;
 
             while (actual + duracion <= fin)

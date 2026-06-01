@@ -126,6 +126,40 @@ namespace Infrastructure.Persistence
                 entity.Property(t => t.Nombre)
                     .HasMaxLength(20)
                     .IsRequired();
+
+                entity.HasData(
+
+                    new TipoCancha
+                    {
+                        IdTipoCancha = 1,
+                        Nombre = "Fútbol 5",
+                        Superficie = "Césped sintético",
+                        Capacidad = 10,
+                        Duracion = 60,
+                        Precio = 18000
+                    },
+
+                    new TipoCancha
+                    {
+                        IdTipoCancha = 2,
+                        Nombre = "Fútbol 7",
+                        Superficie = "Césped sintético",
+                        Capacidad = 14,
+                        Duracion = 90,
+                        Precio = 30000
+                    },
+
+                    new TipoCancha
+                    {
+                        IdTipoCancha = 3,
+                        Nombre = "Fútbol 11",
+                        Superficie = "Césped natural",
+                        Capacidad = 22,
+                        Duracion = 120,
+                        Precio = 55000
+                    }
+
+                );
             });
 
             // CANCHA

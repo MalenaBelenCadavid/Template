@@ -1,4 +1,6 @@
 import {postData} from "../../Global/ApiServices.js"
+const SESSION_KEYS = ["dni", "nombre", "logged", "Adminlogged", "Profesorlogged", "Entrenadorlogged"];
+
 export async function adminLogin() {
     
     const correo = document.getElementById("email").value;
@@ -15,18 +17,7 @@ export async function adminLogin() {
     {
         const response = await postData(endpointUrl,body);
 
-        if(localStorage.getItem("dni"))
-        {
-            localStorage.removeItem("dni")    
-        }
-        if(localStorage.getItem("nombre"))
-        {
-            localStorage.removeItem("nombre")    
-        }
-        if(localStorage.getItem("logged"))
-        {
-            localStorage.removeItem("logged")    
-        }
+        SESSION_KEYS.forEach(key => localStorage.removeItem(key));
 
         localStorage.setItem("dni",response.dni);
         localStorage.setItem("nombre",response.nombre);

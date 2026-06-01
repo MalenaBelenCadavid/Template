@@ -28,7 +28,7 @@ export function RenderCards(canchas) {
 
             <span class="meta-pill">${superficie}</span>
             <span class="meta-pill">${capacidad} jugadores</span>
-            <span class="meta-pill">${duracion}h por turno</span>
+            <span class="meta-pill">${duracion} min por turno</span>
 
           </div>
 

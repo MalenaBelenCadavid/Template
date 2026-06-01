@@ -1,0 +1,192 @@
+/* =========================
+   DASHBOARD METRICAS
+========================= */
+
+#dashboard {
+    width: 100%;
+    padding: 10px;
+}
+
+/* CONTENEDOR GENERAL */
+
+.metricas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+/* HEADER */
+
+.metricas-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.metricas-header h2 {
+    color: #22c55e;
+    font-size: 28px;
+}
+
+.metricas-header p {
+    color: #bdbdbd;
+    font-size: 15px;
+}
+
+/* GRID METRICAS */
+
+.metricas-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* CARD INDIVIDUAL */
+
+.metrica-card {
+    background: linear-gradient(145deg, #181818, #141414);
+    border: 1px solid #22c55e;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.12);
+    transition: 0.25s ease;
+}
+
+.metrica-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.22);
+}
+
+.metrica-card h3 {
+    color: #22c55e;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* VALOR */
+
+.metrica-valor {
+    font-size: 34px;
+    font-weight: bold;
+    color: white;
+}
+
+/* CANCHAS SECTION */
+
+.canchas-section {
+    background: linear-gradient(145deg, #181818, #141414);
+    border: 1px solid #22c55e;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.12);
+}
+
+.canchas-section h3 {
+    color: #22c55e;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+/* LISTADO */
+
+.canchas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* CARD CANCHA */
+
+.cancha-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background-color: #121212;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 16px;
+    transition: 0.25s ease;
+}
+
+.cancha-card:hover {
+    border-color: #22c55e;
+    transform: translateY(-2px);
+}
+
+/* RANKING */
+
+.cancha-ranking {
+    min-width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* INFO */
+
+.cancha-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cancha-info h4 {
+    color: white;
+    font-size: 18px;
+}
+
+.cancha-info p {
+    color: #22c55e;
+    font-size: 15px;
+}
+
+.cancha-info span {
+    color: #bdbdbd;
+    font-size: 13px;
+}
+
+/* ANIMACION */
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .metricas-header h2 {
+        font-size: 22px;
+    }
+
+    .metrica-valor {
+        font-size: 26px;
+    }
+
+    .cancha-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cancha-ranking {
+        width: 42px;
+        height: 42px;
+        font-size: 16px;
+    }
+}

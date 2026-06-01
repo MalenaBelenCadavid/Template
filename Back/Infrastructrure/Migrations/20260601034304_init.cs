@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class competicionesYcoFix : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,21 +22,6 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Administradores", x => x.Dni);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Asistencia",
-                columns: table => new
-                {
-                    IdAsistencia = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DniCliente = table.Column<int>(type: "int", nullable: false),
-                    IdClase = table.Column<int>(type: "int", nullable: false),
-                    Presente = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Asistencia", x => x.IdAsistencia);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,7 +63,9 @@ namespace Infrastructure.Migrations
                     Valor = table.Column<double>(type: "float", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FechaInicio = table.Column<DateTime>(type: "datetime", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "datetime", nullable: false)
+                    FechaFin = table.Column<DateTime>(type: "datetime", nullable: false),
+                    TipoDescuento = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Activo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,11 +132,18 @@ namespace Infrastructure.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Victorias = table.Column<int>(type: "int", nullable: false),
                     Derrotas = table.Column<int>(type: "int", nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    DniCliente = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Equipo", x => x.IdEquipo);
+                    table.ForeignKey(
+                        name: "FK_Equipo_Clientes_DniCliente",
+                        column: x => x.DniCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "Dni",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Equipo_Competencia_IdCompetencia",
                         column: x => x.IdCompetencia,
@@ -398,6 +394,40 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Asistencia",
+                columns: table => new
+                {
+                    IdAsistencia = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DniCliente = table.Column<int>(type: "int", nullable: false),
+                    IdClase = table.Column<int>(type: "int", nullable: true),
+                    IdEntrenamiento = table.Column<int>(type: "int", nullable: true),
+                    Presente = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Asistencia", x => x.IdAsistencia);
+                    table.ForeignKey(
+                        name: "FK_Asistencia_Clase_IdClase",
+                        column: x => x.IdClase,
+                        principalTable: "Clase",
+                        principalColumn: "IdClase",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Asistencia_Clientes_DniCliente",
+                        column: x => x.DniCliente,
+                        principalTable: "Clientes",
+                        principalColumn: "Dni",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Asistencia_Entrenamiento_IdEntrenamiento",
+                        column: x => x.IdEntrenamiento,
+                        principalTable: "Entrenamiento",
+                        principalColumn: "IdEntrenamiento",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Inscripcion",
                 columns: table => new
                 {
@@ -506,6 +536,31 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "TipoCancha",
+                columns: new[] { "IdTipoCancha", "Capacidad", "Duracion", "Nombre", "Precio", "Superficie" },
+                values: new object[,]
+                {
+                    { 1, 10, 60, "Fútbol 5", 18000, "Césped sintético" },
+                    { 2, 14, 90, "Fútbol 7", 30000, "Césped sintético" },
+                    { 3, 22, 120, "Fútbol 11", 55000, "Césped natural" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Asistencia_DniCliente",
+                table: "Asistencia",
+                column: "DniCliente");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Asistencia_IdClase",
+                table: "Asistencia",
+                column: "IdClase");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Asistencia_IdEntrenamiento",
+                table: "Asistencia",
+                column: "IdEntrenamiento");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Cancha_TipoCanchaId",
                 table: "Cancha",
@@ -544,6 +599,11 @@ namespace Infrastructure.Migrations
                 name: "IX_Entrenamiento_EntrenadorDni",
                 table: "Entrenamiento",
                 column: "EntrenadorDni");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Equipo_DniCliente",
+                table: "Equipo",
+                column: "DniCliente");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipo_IdCompetencia",

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Mi Perfil | GolAhora</title>
+  <link rel="stylesheet" href="/css/Perfil/ClientePerfil.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="./js/Perfil/Cliente.js"></script>
+  
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <aside class="sidebar">
+
+      <h2 class="logo">Gol<span>Ahora</span></h2>
+
+      <nav class="sidebar-nav">
+
+
+        <button onclick="window.location.href='index.html'" class="sidebar-btn" data-section="editar">
+          Volver al inicio
+        </button>
+
+      </nav>
+
+    </aside>
+
+    <main class="main">
+
+      <header class="topbar">
+        <h1>Mi Perfil</h1>
+      </header>
+
+      <section class="content-section" id="editar">
+
+        <div class="perfil-form">
+
+          <label>Nombre</label>
+          <input id="nombre" type="text" />
+
+          <label>Apellido</label>
+          <input id="apellido" type="text" />
+
+          <label>Correo</label>
+          <input id="correo" type="email" />
+         
+
+          <label>Localidad</label>
+          <input id="localidad" type="text" />
+
+          <label>País</label>
+          <input id="pais" type="text" />
+
+          <button id="btnGuardar">Guardar cambios</button>
+
+          <button id="btnSocio" class="btn-socio hidden">
+            Convertirse en socio
+          </button>
+
+        </div>
+
+      </section>
+    </main>
+
+  </div>
+
+</body>
+</html>
