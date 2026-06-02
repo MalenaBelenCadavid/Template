@@ -26,10 +26,22 @@ import { renderAccionesCobro } from "./cobrosBtns.js";
 import { renderAccionesRecibo } from "./recibosBtns.js";
 import { editarCompetencia } from "./Modals/editarCompetencia.js";
 import { renderMetricas } from "./Modals/renderMetricas.js";
+import { manejarConsultarCobro } from "../Cobros/consultarCobro.js"; 
+import { manejarImprimirTicket } from "../Cobros/imprimirTicket.js";
+import { registrarRecibo } from "../recibos/generarRecibo.js";
+import { manejarConsultarRecibo } from "../recibos/consultarRecibo.js";
+import { imprimirRecibo } from "../recibos/imprimirRecibo.js";
+
+
 
 
 
 export function adminPanel(){
+  const admin = localStorage.getItem("Adminlogged");
+  if(admin !="true")
+    {
+      window.location.href="adminLogin.html";
+    }
 const botones = document.querySelectorAll(".sidebar-btn");
 const secciones = document.querySelectorAll(".content-section");
 
@@ -569,7 +581,7 @@ if (seccionAct == "Competencias") {
   
   }
 
-  if(seccionAct == "Cobros y recibos")
+ if(seccionAct == "Cobros y recibos")
     {
       const container = document.querySelector("#cobrosYrecibos");
        if (!container) {
@@ -577,6 +589,38 @@ if (seccionAct == "Competencias") {
         return;
       }
       container.innerHTML = renderAccionesCobro() + renderAccionesRecibo();
+
+
+      const btnConsultarCobro = container.querySelector("#btn-consultar-cobro");
+      btnConsultarCobro.addEventListener("click", async ()=>
+        {
+            manejarConsultarCobro();
+        });
+      const btnImprimirCobro = container.querySelector("#btn-imprimir-cobro");    
+      btnImprimirCobro.addEventListener("click",async()=>
+        {
+          manejarImprimirTicket();
+        });
+      const btnGenerarRecibo = container.querySelector("#btn-generar-recibo");  
+      btnGenerarRecibo.addEventListener("click",async()=>
+        {
+          registrarRecibo();
+        });
+      
+      const btnConsultarRecibo = container.querySelector("#btn-consultar-recibo");  
+      btnConsultarRecibo.addEventListener("click",async()=>
+        {
+          manejarConsultarRecibo();
+        });
+      const btnImprimirRecibo = container.querySelector("#btn-imprimir-recibo");  
+      btnImprimirRecibo.addEventListener("click",async()=>
+        {
+          imprimirRecibo();
+        });
+
+      
+
+
     }
   if(seccionAct == "Descuentos")
     {

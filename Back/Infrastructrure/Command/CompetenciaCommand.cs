@@ -54,14 +54,30 @@ namespace Infrastructure.Command
             await _context.Partidos.AddRangeAsync(fixture, ct);
             await _context.SaveChangesAsync(ct);
         }
-        public async Task DecrementarCupo(int idCompetencia, CancellationToken ct = default)
-        {
+            public async Task DecrementarCupo(
+         int idCompetencia,
+         CancellationToken ct = default)
+            {
             var competencia = await _context.Competencias
-                .FirstOrDefaultAsync(c => c.IdCompetencia == idCompetencia, ct);
+                .FirstOrDefaultAsync(
+                    c => c.IdCompetencia == idCompetencia,
+                    ct
+                );
+
             if (competencia is null)
-                throw new ExceptionNotFound("Competencia no encontrada");
+                throw new ExceptionNotFound(
+                    "Competencia no encontrada"
+                );
+
+            if (competencia.Cupos <= 0)
+                throw new ExceptionConflict(
+                    "No hay más cupos disponibles"
+                );
+
             competencia.Cupos--;
+
             _context.Competencias.Update(competencia);
+
             await _context.SaveChangesAsync(ct);
         }
         public async Task EliminarPartidos(int idComptetencia, CancellationToken ct = default)

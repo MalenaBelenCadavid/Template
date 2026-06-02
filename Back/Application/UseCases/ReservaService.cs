@@ -1,9 +1,13 @@
 ﻿using Application.DTOs.Request.Reserva;
 using Application.DTOs.Response.Reserva;
 using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.Cancha;
+using Application.Interfaces.Cliente;
+using Application.Interfaces.Cobro;
 using Application.Interfaces.HorarioCancha;
 using Application.Interfaces.Reserva;
+using Application.Interfaces.TipoCancha;
 using Domain.Entities;
 
 namespace Application.UseCases
@@ -15,19 +19,33 @@ namespace Application.UseCases
         private readonly ICanchaQuery _canchaQuery;
         private readonly IHorarioCanchaQuery _horarioCanchaQuery;
         private readonly IHorarioCanchaCommand _horarioCanchaCommand;
-
+        private readonly ICobroQuery _cobroQuery;
+        private readonly ICobroCommand _cobroCommand;
+        private readonly IDescuentoQuery _descuentoQuery;
+        private readonly IClienteQuery _clienteQuery;
+        private readonly ITipoCanchaQuery _tipoCancha;
         public ReservaService(
             IReservaCommand reservaCommand,
             IReservaQuery reservaQuery,
             ICanchaQuery canchaQuery,
             IHorarioCanchaQuery horarioCanchaQuery,
-            IHorarioCanchaCommand horarioCanchaCommand)
+            IHorarioCanchaCommand horarioCanchaCommand,
+            ICobroCommand cobroCommand,
+            ICobroQuery cobroQuery,
+            IDescuentoQuery descuentoQuery,
+            IClienteQuery clienteQuery,
+            ITipoCanchaQuery tipoCanchaQuery)
         {
             _reservaCommand = reservaCommand;
             _reservaQuery = reservaQuery;
             _canchaQuery = canchaQuery;
             _horarioCanchaQuery= horarioCanchaQuery;
             _horarioCanchaCommand = horarioCanchaCommand;
+            _cobroCommand = cobroCommand;
+            _cobroQuery= cobroQuery;
+            _descuentoQuery = descuentoQuery;
+            _clienteQuery= clienteQuery;
+            _tipoCancha = tipoCanchaQuery;
         }
 
         public async Task<ReservaResponse> CrearReserva(CrearReservaRequest request)
@@ -53,22 +71,37 @@ namespace Application.UseCases
             {
                 throw new ExceptionBadRequest("Debe ingresar un horario valido");
             }
-         
 
+            var cliente = await _clienteQuery.ConsultarCliente(request.DniCliente) ?? throw new ExceptionNotFound("Cliente no encontrado");
+
+            var descuento = await _descuentoQuery.GetDescuentoActivoPorTipo("Reserva");
+            if (descuento == null)
+                descuento = await _descuentoQuery.GetDescuentoActivoPorTipo("General");
             var horarioCancha = await _horarioCanchaQuery.ConsultarHorarioCancha(request.IdCanchaHorario);
             if (horarioCancha == null)
             {
                 throw new ExceptionBadRequest("Debe un horario valido");
             }
 
-            if (horarioCancha.IdCancha!=request.IdCancha)
+            if (horarioCancha.IdCancha != request.IdCancha)
             {
                 throw new ExceptionBadRequest("El horario solicitado no pertenece a la cancha");
             }
 
-            if ( await _reservaQuery.ExisteReserva(request.IdCanchaHorario, request.Fecha))
+            if (await _reservaQuery.ExisteReserva(request.IdCanchaHorario, request.Fecha))
             {
                 throw new ExceptionConflict("El día que intenta reservar ya fue reservado");
+            }
+            var tipoCancha = await _tipoCancha.ObtenerTipoCancha(cancha.TipoCanchaId);
+            decimal precioFinal = tipoCancha.Precio;
+
+
+
+            Console.WriteLine("Descuento: " + (descuento?.Valor ?? 0));
+            if (cliente.EsSocio && descuento != null) 
+            {
+                decimal porcentaje = descuento.Valor / 100m;
+                precioFinal = precioFinal - (precioFinal * porcentaje);
             }
 
             var reserva = new Reserva
@@ -76,7 +109,7 @@ namespace Application.UseCases
                 DniCliente = request.DniCliente,
                 IdCancha = request.IdCancha,
                 IdCanchaHorario = request.IdCanchaHorario,
-                MontoTotal = cancha.TipoCancha.Precio,
+                MontoTotal =(int)precioFinal,
                 Fecha=request.Fecha,
                 EsValida = true,
                 Cancha = cancha
@@ -208,14 +241,24 @@ namespace Application.UseCases
 
             var reserva = await _reservaQuery.ConsultarReserva(reservaId);
 
+
             if (reserva == null)
             {
                 throw new ExceptionNotFound("Reserva no encontrada");
             }
 
-            var reservaEliminada = await _reservaCommand.EliminarReserva(reserva);
+            var cobro = await _cobroQuery.ConsultarCobro(reserva.Cobro.IdCobro);
 
-            return new ReservaResponse
+            
+
+            if (cobro == null)
+            {
+                throw new ExceptionNotFound("Cobro no encontrado");
+            }
+
+            await _cobroCommand.EliminarCobro(cobro);
+
+            var response = new ReservaResponse
             {
                 ReservaId = reserva.IdReserva,
                 DniCliente = reserva.DniCliente,
@@ -228,8 +271,13 @@ namespace Application.UseCases
                 },
                 Total = reserva.MontoTotal,
                 NombreCancha = reserva.Cancha.Nombre,
-                esValida=reserva.EsValida
+                esValida = reserva.EsValida
             };
+
+
+            var reservaEliminada = await _reservaCommand.EliminarReserva(reserva);
+
+            return response;
         }
 
         public async Task<List<ReservaResponse>> ListarReservasPorDni(int dni)

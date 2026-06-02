@@ -56,7 +56,7 @@ export function RenderProfesionalCards(profesionales, tipo) {
               </span>
 
               <span class="admin-info-value">
-                ${p.estaCertificado ? "Sí" : "No"}
+                Si
               </span>
 
             </div>
@@ -81,9 +81,7 @@ export function RenderProfesionalCards(profesionales, tipo) {
 
           <div class="admin-card-actions">
 
-            <button class="admin-btn admin-btn-detalles">
-              Ver perfil
-            </button>
+            
 
             <button 
               class="admin-btn admin-btn-delete"

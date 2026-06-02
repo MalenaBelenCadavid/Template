@@ -441,7 +441,7 @@ namespace Infrastructure.Persistence
                 entity.HasOne(r => r.Cobro)
                     .WithMany()
                     .HasForeignKey(r => r.IdCobro)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Reserva)
                     .WithMany()

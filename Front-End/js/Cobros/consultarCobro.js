@@ -39,13 +39,44 @@ export async function manejarConsultarCobro() {
         }
 
         // Si pasó el filtro, el cobro existe de verdad. Mostramos la info limpia.
-        Swal.fire({
-            title: `Datos de Cobro Nro ${idCobro}`,
-            html: `<pre style="text-align: left; background: #222; padding: 10px; border-radius: 5px; color: #4ade80;">${JSON.stringify(datosCobro, null, 4)}</pre>`,
-            background: '#161616', color: '#ffffff',
-            confirmButtonColor: '#22c55e',
-            confirmButtonText: 'OK'
-        });
+       Swal.fire({
+                title: `Cobro N° ${idCobro}`,
+                background: '#161616',
+                color: '#ffffff',
+                confirmButtonColor: '#22c55e',
+                confirmButtonText: 'OK',
+
+                html: `
+                    <div style="
+                        text-align:left;
+                        padding:20px;
+                        border-radius:12px;
+                        background: #1f1f1f;
+                        box-shadow: 0 0 15px rgba(0,0,0,0.4);
+                        font-family: Arial, sans-serif;
+                    ">
+
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                            <h2 style="margin:0; font-size:18px; color:#22c55e;">
+                                Comprobante de Cobro
+                            </h2>
+                        </div>
+
+                        <hr style="border:0; border-top:1px solid #333; margin-bottom:15px;" />
+
+                        <p><strong style="color:#9ca3af;">ID Cobro:</strong> ${datosCobro.id_Cobro}</p>
+                        <p><strong style="color:#9ca3af;">ID Reserva:</strong> ${datosCobro.id_Reserva}</p>
+                        <p><strong style="color:#9ca3af;">Monto Total:</strong> 
+                            <span style="color:#22c55e; font-weight:bold;">$${datosCobro.montoTotal}</span>
+                        </p>
+                
+
+                        <div style="margin-top:15px; padding:10px; background:#0f0f0f; border-radius:8px; text-align:center; color:#9ca3af;">
+                            Gol Ahora • Sistema de gestión deportiva
+                        </div>
+                    </div>
+                `
+            });
 
     } catch (err) {
         // En caso de que se caiga el servidor local o la red

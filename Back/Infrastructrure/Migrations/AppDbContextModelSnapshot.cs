@@ -235,8 +235,8 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<double>("Valor")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("IdDescuento");
 
@@ -905,7 +905,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Cobro", "Cobro")
                         .WithMany()
                         .HasForeignKey("IdCobro")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Reserva", "Reserva")

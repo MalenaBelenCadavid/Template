@@ -1,12 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.DTOs.Request.Cobro;
+﻿using Application.DTOs.Request.Cobro;
 using Application.DTOs.Response.Cobro;
 using Application.Exceptions;
 using Application.Interfaces.Cliente;
 using Application.Interfaces.Cobro;
-using Domain.Entities;
 
 namespace Application.UseCases
 {
@@ -110,25 +106,22 @@ namespace Application.UseCases
         public async Task<CobroResponse> ConsultarCobro(int idCobro, CancellationToken ct = default)
         {
             if (idCobro <= 0)
-            {
                 throw new ExceptionBadRequest("Debe ingresar un ID válido");
-            }
 
             var cobro = await _cobroQuery.ConsultarCobro(idCobro, ct);
+
             if (cobro == null)
-            {
                 throw new ExceptionNotFound("Cobro no encontrado");
-            }
 
             return new CobroResponse
             {
-                Id_Cobro = cobro.IdCobro,   
-                Id_Reserva =(int) cobro.IdReserva,
-                IdInscripcion=cobro.IdInscripcion,
-                clienteDni=cobro.DniCliente,
-                metodoPago=cobro.MetodoPago,    
+                Id_Cobro = cobro.IdCobro,
+                Id_Reserva = cobro.IdReserva ?? 0,   // ✔ safe
+                IdInscripcion = cobro.IdInscripcion ?? 0, // ✔ safe
+                clienteDni = cobro.DniCliente,
+                metodoPago = cobro.MetodoPago,
                 EstaCompleto = cobro.EstaCompleto,
-                MontoTotal = (decimal)cobro.MontoTotal 
+                MontoTotal = (decimal)cobro.MontoTotal // ✔ safe
             };
         }
 

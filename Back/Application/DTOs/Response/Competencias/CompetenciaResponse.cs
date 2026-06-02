@@ -13,6 +13,7 @@ namespace Application.DTOs.Response.Competencias
         public string Descripcion { get; set; }
         public int Cupos { get; set; }
         public double Precio { get; set; }
+        public string tipo { get; set; }
         public ICollection<EquipoResponse> Equipos { get; set; }
         public ICollection<PartidoResponse> Partidos { get; set; }
     }

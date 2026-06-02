@@ -1,6 +1,5 @@
-// descuentos.js - lógica del dashboard de descuentos
-
-const API_BASE = 'http://localhost:5211/api/v1';
+// Probá con extensión explícita
+import { getData, postData, deleteData, putData } from "../Global/ApiServices.js";
 
 let descuentos = [];
 let nextId = 1;
@@ -18,9 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Cargar descuentos desde el backend
 async function cargarDescuentos() {
   try {
-    const res = await fetch(`${API_BASE}/Descuento`);
-    if (!res.ok) throw new Error();
-    descuentos = await res.json();
+    descuentos = await getData('Descuento');
     renderTabla();
   } catch {
     renderTabla();
@@ -50,13 +47,7 @@ async function crearDescuento() {
   };
 
   try {
-    const res = await fetch(`${API_BASE}/Descuento`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if (!res.ok) throw new Error();
-    const nuevo = await res.json();
+    const nuevo = await postData('Descuento', body);
     descuentos.push(nuevo);
     mostrarToast('✓ Descuento creado correctamente', 'success');
   } catch {
@@ -74,7 +65,7 @@ async function crearDescuento() {
 async function eliminarDescuento(id) {
   if (!confirm('¿Seguro que querés eliminar este descuento?')) return;
   try {
-    await fetch(`${API_BASE}/Descuento/${id}`, { method: 'DELETE' });
+    await deleteData(`Descuento/${id}`);
   } catch { }
   descuentos = descuentos.filter(d => d.idDescuento !== id);
   renderTabla();
@@ -83,16 +74,23 @@ async function eliminarDescuento(id) {
 
 // Activar / Desactivar
 async function toggleActivo(id) {
-  const d = descuentos.find(d => d.idDescuento === id);
-  if (!d) return;
-  d.activo = !d.activo;
+  let d;
   try {
-    await fetch(`${API_BASE}/Descuento/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(d)
-    });
+    d = await getData(`Descuento/${id}`);
+  } catch {
+    mostrarToast('No se pudo obtener el descuento', 'error');
+    return;
+  }
+
+  d.activo = !d.activo;
+
+  try {
+    await putData(`Descuento/${id}`, d);
   } catch { }
+
+  const index = descuentos.findIndex(x => x.idDescuento === id);
+  if (index !== -1) descuentos[index] = d;
+
   renderTabla();
   mostrarToast(d.activo ? '✓ Descuento activado' : 'Descuento desactivado', d.activo ? 'success' : 'error');
 }
@@ -147,8 +145,7 @@ async function simular() {
   let descuento = null;
 
   try {
-    const res = await fetch(`${API_BASE}/Descuento/vigente/${tipo}`);
-    if (res.ok) descuento = await res.json();
+    descuento = await getData(`Descuento/vigente/${tipo}`);
   } catch {
     const ahora = new Date();
     descuento = descuentos.find(d =>
@@ -187,3 +184,10 @@ function mostrarToast(mensaje, tipo) {
   toast.className = `toast ${tipo} show`;
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
+
+// Al final de descuentos.js
+window.crearDescuento = crearDescuento;
+window.eliminarDescuento = eliminarDescuento;
+window.toggleActivo = toggleActivo;
+window.filtrar = filtrar;
+window.simular = simular;

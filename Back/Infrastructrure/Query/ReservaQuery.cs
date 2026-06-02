@@ -17,7 +17,7 @@ namespace Infrastructure.Query
 
         public async Task<Reserva> ConsultarReserva(int ReservaId, CancellationToken ct = default)
         {
-            return await _context.Reservas.Include(c=>c.HorarioCancha).FirstOrDefaultAsync(r => r.IdReserva == ReservaId,ct);
+            return await _context.Reservas.Include(cancha=> cancha.Cancha).Include(c=>c.HorarioCancha).Include(co=>co.Cobro).FirstOrDefaultAsync(r => r.IdReserva == ReservaId,ct);
         }
 
         public async Task<bool>ExisteReserva(int canchaId,DateOnly fecha,CancellationToken ct = default) 
