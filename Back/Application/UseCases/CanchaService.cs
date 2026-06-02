@@ -148,83 +148,56 @@ namespace Application.UseCases
         public async Task<CanchaResponse> ModificarCancha(int canchaId, ActualizarCanchaRequest request)
         {
             if (canchaId <= 0)
-            {
                 throw new ExceptionBadRequest("Ingrese un valor válido");
-            }
 
-            var cancha = await _canchaQuery.ConsultarCancha(canchaId);
+            var cancha = await _canchaQuery.ConsultarCancha(canchaId)
+                ?? throw new ExceptionNotFound("Cancha no encontrada");
 
-            if (cancha == null)
+            cancha.Disponibilidad = cancha.Disponibilidad
+                .Where(h => h.IdCancha == cancha.IdCancha)
+                .ToList();
+
+            var tipoCancha = cancha.TipoCancha;
+
+            // =========================
+            // CAMBIO TIPO CANCHA
+            // =========================
+            if (request.TipoCanchaId.HasValue &&
+                request.TipoCanchaId.Value != cancha.TipoCanchaId)
             {
-                throw new ExceptionNotFound("Cancha no encontrada");
-            }
+                tipoCancha = await _tipoCanchaQuery.ObtenerTipoCancha(request.TipoCanchaId.Value);
 
-            if (request.TipoCanchaId != null && request.TipoCanchaId != cancha.TipoCanchaId)
-            {
-
-                var tipoCancha = await _tipoCanchaQuery.ObtenerTipoCancha((int)request.TipoCanchaId);
-
-                var horariosAgrupados = cancha.Disponibilidad
+                var nuevosSlots = cancha.Disponibilidad
                     .GroupBy(h => h.Dia)
-                    .Select(g => new
-                    {
-                        Dia = g.Key,
-
-                        // hora mas temprana
-                        HoraInicio = g.Min(x => x.HoraInicio),
-
-                        // hora mas tardia
-                        HoraFin = g.Max(x => x.HoraFin)
-                    })
-                    .ToList();
-
-
-
-                var nuevosHorarios = new List<HorarioCancha>();
-
-                foreach (var horario in horariosAgrupados)
-                {
-                    var slots = GenerarSlots(
-                        horario.Dia,
-                        horario.HoraInicio,
-                        horario.HoraFin,
+                    .SelectMany(g => GenerarSlots(
+                        g.Key,
+                        g.Min(x => x.HoraInicio),
+                        g.Max(x => x.HoraFin),
                         tipoCancha.Duracion,
                         cancha.IdCancha
-                    );
+                    ))
+                    .ToList();
 
-                    nuevosHorarios.AddRange(slots);
-                }
+                cancha.Disponibilidad = nuevosSlots;
 
-                await _horarioCanchaCommand.EliminarHorario(cancha.Disponibilidad);
-
-                cancha.Disponibilidad.Clear();
-
-                foreach (var slot in nuevosHorarios)
-                {
-                    cancha.Disponibilidad.Add(slot);
-                }
-
-                // actualizar tipo cancha
-                cancha.TipoCanchaId = (int)request.TipoCanchaId;
+                cancha.TipoCanchaId = tipoCancha.IdTipoCancha;
                 cancha.TipoCancha = tipoCancha;
             }
 
+            // =========================
+            // AJUSTE HORARIOS
+            // =========================
             if (request.horarios != null)
             {
                 foreach (var horarioReq in request.horarios)
                 {
-                    var aEliminar = cancha.Disponibilidad.Where(h => h.Dia == horarioReq.Dia).ToList();
-
-                    foreach (var h in aEliminar)
-                    {
-                        cancha.Disponibilidad.Remove(h);
-                    }
+                    cancha.Disponibilidad.RemoveAll(h => h.Dia == horarioReq.Dia);
 
                     var nuevosSlots = GenerarSlots(
                         horarioReq.Dia,
                         horarioReq.HoraInicio,
                         horarioReq.HoraFin,
-                        cancha.TipoCancha.Duracion,
+                        tipoCancha.Duracion,
                         cancha.IdCancha
                     );
 
@@ -234,8 +207,6 @@ namespace Application.UseCases
 
             cancha.Nombre = request.Nombre ?? cancha.Nombre;
             cancha.TipoCanchaId = request.TipoCanchaId ?? cancha.TipoCanchaId;
-
-
 
             var canchaAct = await _canchaCommand.ModificarCancha(cancha);
 
@@ -252,15 +223,15 @@ namespace Application.UseCases
                     Precio = canchaAct.TipoCancha.Precio,
                     Duracion = canchaAct.TipoCancha.Duracion,
                 },
-
-                Disponibilidad = cancha.Disponibilidad.Select(horario => new HorarioCanchaResponse
-                {
-                    HorarioCanchaId = horario.Id,
-                    Dia = horario.Dia,
-                    HoraInicio = horario.HoraInicio,
-                    HoraFin = horario.HoraFin,
-
-                }).ToList(),
+                Disponibilidad = canchaAct.Disponibilidad
+                    .Where(h => h.IdCancha == canchaAct.IdCancha)
+                    .Select(h => new HorarioCanchaResponse
+                    {
+                        HorarioCanchaId = h.Id,
+                        Dia = h.Dia,
+                        HoraInicio = h.HoraInicio,
+                        HoraFin = h.HoraFin,
+                    }).ToList()
             };
         }
 

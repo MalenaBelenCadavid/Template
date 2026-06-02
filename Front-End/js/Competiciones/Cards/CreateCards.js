@@ -325,13 +325,10 @@ export async function CreateCompetitionCards(
                       );
 
 
-                      comp.cupos -= 1;
+                      competicionesData = await getCompeticiones();
 
-                      if (
-                        comp.cupos < 0
-                      ) {
-                        comp.cupos = 0;
-                      }
+                    container.innerHTML =
+                      RenderCompetitionCards(competicionesData);
 
                       container.innerHTML =
                         RenderCompetitionCards(

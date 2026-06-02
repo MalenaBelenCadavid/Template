@@ -123,3 +123,327 @@
 .competencia-card:hover .competencia-title {
   color: #4ade80;
 }
+
+.bracket-container{
+    display:flex;
+    gap:40px;
+
+    overflow-x:auto;
+
+    padding:20px;
+}
+
+.bracket-round{
+    min-width:320px;
+
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+}
+
+.match-card{
+
+    background:#1f1f1f;
+
+    border-radius:14px;
+
+    padding:16px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:12px;
+
+    border:1px solid rgba(255,255,255,.08);
+}
+.team-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+.match-status.programado{
+    color:orange;
+}
+
+.match-status.finalizado{
+    color:#00d26a;
+}
+
+/* =========================================
+   MODAL LIGA
+========================================= */
+
+.modal-liga {
+  width: 95%;
+  max-width: 1400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #111827;
+  border-radius: 18px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.modal-header h2 {
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.cerrar-modal {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #ef4444;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cerrar-modal:hover {
+  transform: scale(1.05);
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* =========================================
+   TABLA POSICIONES
+========================================= */
+
+.liga-tabla-container {
+  background: #1f2937;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.liga-title {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.liga-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.liga-tabla thead {
+  background: #111827;
+}
+
+.liga-tabla th {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px;
+  text-align: center;
+}
+
+.liga-tabla td {
+  color: white;
+  padding: 14px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.liga-tabla tbody tr {
+  transition: 0.2s;
+}
+
+.liga-tabla tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+/* =========================================
+   DESTACAR PUNTOS
+========================================= */
+
+.liga-puntos {
+  font-weight: 700;
+  color: #22c55e;
+}
+
+/* =========================================
+   FIXTURE
+========================================= */
+
+.liga-fixture {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* =========================================
+   PARTIDO
+========================================= */
+
+.fixture-card {
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: 0.2s;
+}
+
+.fixture-card:hover {
+  transform: translateY(-2px);
+}
+
+.fixture-equipos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.equipo {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  width: 180px;
+}
+
+.resultado-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resultado-box input {
+  width: 65px;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  background: #111827;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.guion {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* =========================================
+   INFO PARTIDO
+========================================= */
+
+.fixture-info {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fixture-info span {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+}
+
+/* =========================================
+   ESTADOS
+========================================= */
+
+.estado {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px !important;
+  font-weight: 700;
+}
+
+.estado.programado {
+  background: rgba(59,130,246,0.15);
+  color: #60a5fa;
+}
+
+.estado.finalizado {
+  background: rgba(34,197,94,0.15);
+  color: #4ade80;
+}
+
+/* =========================================
+   BOTON GUARDAR
+========================================= */
+
+.fixture-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.btn-guardar {
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-guardar:hover {
+  background: #1d4ed8;
+}
+
+.btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .fixture-equipos {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .equipo {
+    width: auto;
+    text-align: center;
+  }
+
+  .liga-tabla {
+    font-size: 13px;
+  }
+
+  .liga-tabla th,
+  .liga-tabla td {
+    padding: 10px 6px;
+  }
+}

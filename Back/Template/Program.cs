@@ -24,6 +24,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces.Cobro;
 using Application.Interfaces.MetricasService;
+using Application.Interfaces.Recibo;
+using Application.UseCases.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -148,6 +150,10 @@ builder.Services.AddScoped<IDescuentoQuery, DescuentoQuery>();
 builder.Services.AddScoped<IDescuentoService, DescuentoService>();
 //Metricas
 builder.Services.AddScoped<IMetricasService, MetricasService>();
+//Recibos
+builder.Services.AddScoped<IReciboCommand, ReciboCommand>();
+builder.Services.AddScoped<IReciboQuery, ReciboQuery>();
+builder.Services.AddScoped<IReciboService, ReciboService>();
 
 
 //CORS

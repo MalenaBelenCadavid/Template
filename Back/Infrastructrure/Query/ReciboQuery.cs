@@ -19,8 +19,7 @@ namespace Infrastructure.Query
 
         public async Task<Recibo> ConsultarRecibo(int idRecibo, CancellationToken ct = default)
         {
-            return await _context.Set<Recibo>()
-                .FirstOrDefaultAsync(r => r.IdRecibo == idRecibo, ct);
+            return await _context.Recibos.FirstOrDefaultAsync(r => r.IdRecibo == idRecibo, ct);
         }
 
         public async Task<Recibo> ImprimirRecibo(int idRecibo, CancellationToken ct = default)

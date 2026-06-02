@@ -60,7 +60,7 @@ namespace Infrastructure.Migrations
                 {
                     IdDescuento = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Valor = table.Column<double>(type: "float", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FechaInicio = table.Column<DateTime>(type: "datetime", nullable: false),
                     FechaFin = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -527,7 +527,7 @@ namespace Infrastructure.Migrations
                         column: x => x.IdCobro,
                         principalTable: "Cobro",
                         principalColumn: "IdCobro",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Recibo_Reserva_IdReserva",
                         column: x => x.IdReserva,

@@ -157,7 +157,7 @@ namespace Application.UseCases
             }                  
                                 
 
-            if (cupoAct == 0) {
+            if (cupoAct <= 0) {
                 throw new ExceptionConflict("No hay mas cupo,elija otra actividad");
             }
             switch (request.NroAct)

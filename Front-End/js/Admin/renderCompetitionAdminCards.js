@@ -1,71 +1,189 @@
+import { getCuadro } from "../Competiciones/getCuadro.js";
 import { getEquipos } from "../Competiciones/getEquipos.js";
-import { generarFixture } from "../Fixture/generarFixture.js";
-import { CrearModalEquipos } from "./Modals/VerEquiposModal.js";
-import { VerFixtures } from "./Modals/VerFixture.js";
+import { generarFixture }from "../Fixture/generarFixture.js";
+import { generarFixtureLiga }from "../Fixture/generarFixtureLiga.js";
+import { CrearModalEquipos }from "./Modals/VerEquiposModal.js";
+import { VerFixtures }from "./Modals/VerFixture.js";
+import { VerLiga }from "./Modals/VerLiga.js";
 
 export function RenderCompetitionAdminCards(competiciones) {
 
+  // =========================================
+  // EVENTO VER / GENERAR COMPETENCIA
+  // =========================================
 
-  if (!window.eventGenerarFixture) {
+  if (!window.eventCompetenciaView) {
 
     document.addEventListener("click", async (e) => {
 
-      const btnFixture = e.target.closest(".admin-btn-fixture");
-      if (!btnFixture || btnFixture.disabled) return;
+      const btnFixture =
+        e.target.closest(".admin-btn-fixture");
 
-      const competenciaId = Number(btnFixture.dataset.id);
-      const mode = btnFixture.dataset.mode;
+      if (!btnFixture || btnFixture.disabled)
+        return;
+
+      const competenciaId =
+        Number(btnFixture.dataset.id);
+
+      const mode =
+        btnFixture.dataset.mode;
 
       try {
 
+        const competencia =
+          competiciones.find(
+            c => c.competenciaId === competenciaId
+          );
+
+        if (!competencia) return;
+
+        // =========================================
+        // GENERAR FIXTURE
+        // =========================================
+
         if (mode === "generate") {
 
-          await generarFixture(competenciaId);
+          // =========================================
+          // TORNEO
+          // =========================================
 
-          btnFixture.disabled = true;
-          btnFixture.textContent = "Fixture generado";
+          if (competencia.tipo === "Torneo") {
+
+            await generarFixture(
+              competenciaId
+            );
+
+          }
+
+          // =========================================
+          // LIGA
+          // =========================================
+
+          else if (competencia.tipo === "Liga") {
+
+            await generarFixtureLiga(
+              competenciaId
+            );
+
+          }
+
           btnFixture.dataset.mode = "view";
+
+          btnFixture.textContent =
+            competencia.tipo === "Torneo"
+              ? "Ver Cuadro"
+              : "Ver Liga";
 
           Swal.fire({
             toast: true,
             position: "bottom-end",
             icon: "success",
-            title: "Fixture generado correctamente",
+            title:
+              competencia.tipo === "Torneo"
+                ? "Cuadro generado correctamente"
+                : "Fixture generado correctamente",
             showConfirmButton: false,
             timer: 2500,
             timerProgressBar: true,
             customClass: {
-              popup: "toast-golahora toast-popup-success",
+              popup:
+                "toast-golahora toast-popup-success",
               title: "toast-title"
             }
           });
 
         }
 
-   
+        // =========================================
+        // VER COMPETENCIA
+        // =========================================
+
         else if (mode === "view") {
 
-          const competencia = competiciones.find(
-            c => c.competenciaId === competenciaId
-          );
+          // =========================================
+          // ELIMINAR MODALES ANTERIORES
+          // =========================================
 
-          const partidos = competencia?.partidos ?? [];
+          document
+            .querySelector("#modal-fixture")
+            ?.remove();
 
-          const modalExistente = document.querySelector("#modal-fixture");
-          if (modalExistente) modalExistente.remove();
+          document
+            .querySelector("#modal-liga")
+            ?.remove();
 
-          const modalHTML = VerFixtures(partidos);
+          // =========================================
+          // TORNEO
+          // =========================================
 
-          document.body.insertAdjacentHTML("beforeend", modalHTML);
+          if (competencia.tipo === "Torneo") {
 
-          const modal = document.querySelector("#modal-fixture");
+            const cuadro =
+              await getCuadro(
+                competenciaId
+              );
+
+            const modalHTML =
+              VerFixtures(cuadro);
+
+            document.body.insertAdjacentHTML(
+              "beforeend",
+              modalHTML
+            );
+
+          }
+
+          // =========================================
+          // LIGA
+          // =========================================
+
+          else if (competencia.tipo === "Liga") {
+
+            const modalHTML =
+              VerLiga(competencia);
+
+            document.body.insertAdjacentHTML(
+              "beforeend",
+              modalHTML
+            );
+
+          }
+
+          // =========================================
+          // OBTENER MODAL ACTUAL
+          // =========================================
+
+          const modal =
+            document.querySelector(
+              "#modal-fixture"
+            ) ||
+            document.querySelector(
+              "#modal-liga"
+            );
+
+          if (!modal) return;
+
+          // =========================================
+          // CERRAR MODAL
+          // =========================================
 
           modal.querySelector(".cerrar-modal")
-            .addEventListener("click", () => modal.remove());
+            .addEventListener("click", () => {
+
+              modal.remove();
+
+            });
 
           modal.addEventListener("click", (e) => {
-            if (e.target === modal) modal.remove();
+
+            if (e.target === modal) {
+
+              modal.remove();
+
+            }
+
           });
+
         }
 
       } catch (error) {
@@ -79,50 +197,94 @@ export function RenderCompetitionAdminCards(competiciones) {
           title:
             error?.response?.data?.Message ??
             error?.message ??
-            "Error en fixture",
+            "Error en competencia",
           showConfirmButton: false,
           timer: 2500,
           timerProgressBar: true,
           customClass: {
-            popup: "toast-golahora toast-popup-error",
+            popup:
+              "toast-golahora toast-popup-error",
             title: "toast-title"
           }
         });
+
       }
+
     });
 
-    window.eventGenerarFixture = true;
+    window.eventCompetenciaView = true;
   }
+
+  // =========================================
+  // EVENTO VER EQUIPOS
+  // =========================================
 
   if (!window.eventVerEquipos) {
 
     document.addEventListener("click", async (e) => {
 
-      const btnEquipos = e.target.closest(".admin-btn-teams");
-      if (!btnEquipos || btnEquipos.disabled) return;
+      const btnEquipos =
+        e.target.closest(".admin-btn-teams");
 
-      const competenciaId = Number(btnEquipos.dataset.id);
+      if (!btnEquipos || btnEquipos.disabled)
+        return;
+
+      const competenciaId =
+        Number(btnEquipos.dataset.id);
 
       try {
 
-        const equipos = await getEquipos(competenciaId);
+        const equipos =
+          await getEquipos(competenciaId);
 
-        const modalExistente = document.querySelector("#modal-equipos");
-        if (modalExistente) modalExistente.remove();
+        // =========================================
+        // ELIMINAR MODAL ANTERIOR
+        // =========================================
 
-        const modalHTML = CrearModalEquipos(equipos);
+        document
+          .querySelector("#modal-equipos")
+          ?.remove();
 
-        document.body.insertAdjacentHTML("beforeend", modalHTML);
+        // =========================================
+        // CREAR MODAL
+        // =========================================
 
-        const modal = document.querySelector("#modal-equipos");
+        const modalHTML =
+          CrearModalEquipos(equipos);
 
-        const cerrar = () => modal.remove();
+        document.body.insertAdjacentHTML(
+          "beforeend",
+          modalHTML
+        );
 
-        modal.querySelector(".cerrar-modal-equipos")
-          .addEventListener("click", cerrar);
+        const modal =
+          document.querySelector(
+            "#modal-equipos"
+          );
+
+        if (!modal) return;
+
+        const cerrar = () => {
+
+          modal.remove();
+
+        };
+
+        modal.querySelector(
+          ".cerrar-modal-equipos"
+        ).addEventListener(
+          "click",
+          cerrar
+        );
 
         modal.addEventListener("click", (e) => {
-          if (e.target === modal) cerrar();
+
+          if (e.target === modal) {
+
+            cerrar();
+
+          }
+
         });
 
       } catch (error) {
@@ -133,21 +295,29 @@ export function RenderCompetitionAdminCards(competiciones) {
           toast: true,
           position: "bottom-end",
           icon: "error",
-          title: error?.message ?? "Error al cargar equipos",
+          title:
+            error?.message ??
+            "Error al cargar equipos",
           showConfirmButton: false,
           timer: 2500,
           timerProgressBar: true,
           customClass: {
-            popup: "toast-golahora toast-popup-error",
+            popup:
+              "toast-golahora toast-popup-error",
             title: "toast-title"
           }
         });
+
       }
+
     });
 
     window.eventVerEquipos = true;
   }
 
+  // =========================================
+  // SIN COMPETENCIAS
+  // =========================================
 
   if (!competiciones?.length) {
 
@@ -158,29 +328,56 @@ export function RenderCompetitionAdminCards(competiciones) {
     `;
   }
 
+  // =========================================
+  // RENDER CARDS
+  // =========================================
+
   return `
+
     <div class="admin-clases-grid">
 
       ${competiciones.map(c => {
 
-        const tieneEquipos = (c.equipos?.length ?? 0) >= 2;
-        const sinEquipos = (c.equipos?.length ?? 0) === 0;
-        const tienePartidos = Array.isArray(c.partidos) && c.partidos.length > 0;
+        const tieneEquipos =
+          (c.equipos?.length ?? 0) >= 2;
 
-        const puedeGenerarFixture = tienePartidos && tieneEquipos;
+        const sinEquipos =
+          (c.equipos?.length ?? 0) === 0;
+
+        const tienePartidos =
+          (c.partidos?.length ?? 0) > 0;
+
+        const puedeVerFixture =
+          tienePartidos;
+
+        const puedeGenerarFixture =
+          !tienePartidos && tieneEquipos;
 
         return `
-          <div class="admin-card" data-id="${c.competenciaId}">
+
+          <div
+            class="admin-card"
+            data-id="${c.competenciaId}"
+          >
 
             <div class="admin-card-header">
 
               <div>
-                <h3 class="admin-card-title">${c.nombre}</h3>
-                <p class="admin-card-subtitle">${c.tipo ?? "Competencia"}</p>
+
+                <h3 class="admin-card-title">
+                  ${c.nombre}
+                </h3>
+
+                <p class="admin-card-subtitle">
+                  ${c.tipo ?? "Competencia"}
+                </p>
+
               </div>
 
               <span class="admin-badge">
-                ${c.estado ? "Activa" : "Inactiva"}
+
+               Activa
+
               </span>
 
             </div>
@@ -188,13 +385,27 @@ export function RenderCompetitionAdminCards(competiciones) {
             <div class="admin-card-info">
 
               <div class="admin-info-item">
-                <span class="admin-info-label">Cupos</span>
-                <span class="admin-info-value">${c.cupos ?? 0}</span>
+
+                <span class="admin-info-label">
+                  Cupos
+                </span>
+
+                <span class="admin-info-value">
+                  ${c.cupos ?? 0}
+                </span>
+
               </div>
 
               <div class="admin-info-item">
-                <span class="admin-info-label">Precio</span>
-                <span class="admin-info-value">$${c.precio ?? 0}</span>
+
+                <span class="admin-info-label">
+                  Precio
+                </span>
+
+                <span class="admin-info-value">
+                  $${c.precio ?? 0}
+                </span>
+
               </div>
 
             </div>
@@ -202,43 +413,99 @@ export function RenderCompetitionAdminCards(competiciones) {
             <div class="admin-card-extra">
 
               <div class="admin-professional-box">
-                <span>${c.descripcion ?? "Sin descripción"}</span>
+
+                <span>
+                  ${c.descripcion ??
+                    "Sin descripción"}
+                </span>
+
               </div>
 
             </div>
 
             <div class="admin-card-actions">
 
-              <button class="admin-btn admin-btn-edit" data-id="${c.competenciaId}">
+              <!-- EDITAR -->
+
+              <button
+                class="admin-btn admin-btn-edit"
+                data-id="${c.competenciaId}"
+              >
                 Editar
               </button>
 
-              <button 
+              <!-- FIXTURE -->
+
+              <button
                 class="admin-btn admin-btn-fixture"
                 data-id="${c.competenciaId}"
-                data-mode="${puedeGenerarFixture ? "view":"generate" }"
+
+                data-mode="${
+                  puedeVerFixture
+                    ? "view"
+                    : "generate"
+                }"
+
+                ${
+                  !puedeGenerarFixture &&
+                  !puedeVerFixture
+                    ? "disabled"
+                    : ""
+                }
               >
-                ${puedeGenerarFixture ?   "Ver fixture":"Generar Fixture"}
+
+                ${
+                  puedeVerFixture
+
+                    ? (
+                        c.tipo === "Torneo"
+                          ? "Ver Cuadro"
+                          : "Ver Liga"
+                      )
+
+                    : (
+                        c.tipo === "Torneo"
+                          ? "Generar Cuadro"
+                          : "Generar Fixture"
+                      )
+                }
+
               </button>
 
-              <button 
+              <!-- EQUIPOS -->
+
+              <button
                 class="admin-btn admin-btn-teams"
                 data-id="${c.competenciaId}"
                 ${sinEquipos ? "disabled" : ""}
               >
-                ${sinEquipos ? "Sin inscriptos" : "Ver equipos"}
+
+                ${
+                  sinEquipos
+                    ? "Sin inscriptos"
+                    : "Ver equipos"
+                }
+
               </button>
 
-              <button class="admin-btn admin-btn-delete" data-id="${c.competenciaId}">
+              <!-- ELIMINAR -->
+
+              <button
+                class="admin-btn admin-btn-delete"
+                data-id="${c.competenciaId}"
+              >
                 Eliminar
               </button>
 
             </div>
 
           </div>
+
         `;
+
       }).join("")}
 
     </div>
+
   `;
 }

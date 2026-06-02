@@ -10,14 +10,7 @@ export function renderAccionesRecibo() {
           <strong>Generar Recibo</strong>
         </div>
       </button>
-
-      <button class="action-recibo-btn" id="btn-modificar-recibo">
-        <span class="icon icon-yellow">✏️</span>
-        <div>
-          <strong>Modificar Recibo</strong>
-        </div>
-      </button>
-
+    
       <button class="action-recibo-btn" id="btn-consultar-recibo">
         <span class="icon icon-purple">🔍</span>
         <div>
@@ -28,7 +21,7 @@ export function renderAccionesRecibo() {
       <button class="action-recibo-btn" id="btn-imprimir-recibo">
         <span class="icon icon-blue">🖨️</span>
         <div>
-          <strong>Imprimir Copia</strong>
+          <strong>Imprimir Recibo</strong>
         </div>
       </button>
 

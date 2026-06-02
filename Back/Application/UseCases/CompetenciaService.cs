@@ -71,6 +71,7 @@ namespace Application.UseCases
                     derrotas = e.Derrotas,
                     estado = e.Estado,
                 }).ToList(),
+                tipo=competencia is Torneo ? "Torneo":"Liga",
                 Partidos = competencia.Partidos.Select(p => new PartidoResponse
                 {
                     IdPartido = p.IdPartido,
@@ -132,9 +133,10 @@ namespace Application.UseCases
             {
                 competenciaId = c.IdCompetencia,
                 Nombre = c.Nombre,
-                Cupos = c.Cupos - c.Equipos.Count(),
+                Cupos = c.Cupos  ,
                 Descripcion = c.Descripcion,
                 Precio = c.Precio,
+                tipo = c is Torneo ? "Torneo" : "Liga",
                 Equipos = c.Equipos.Select(e => new EquipoResponse
                 {
                     id = e.IdEquipo,

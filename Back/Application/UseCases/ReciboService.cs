@@ -1,5 +1,7 @@
 ﻿using Application.DTOs.Request.Recibo;
 using Application.DTOs.Response.Recibo;
+using Application.Exceptions;
+using Application.Interfaces.Cobro;
 using Application.Interfaces.Recibo;
 using Domain.Entities;
 using System;
@@ -12,25 +14,54 @@ namespace Application.UseCases.Services
     {
         private readonly IReciboCommand _command;
         private readonly IReciboQuery _query;
+        private readonly ICobroQuery _cobroQuery;
 
-        public ReciboService(IReciboCommand command, IReciboQuery query)
+        public ReciboService(IReciboCommand command, IReciboQuery query,ICobroQuery cobroQuery)
         {
             _command = command;
             _query = query;
+            _cobroQuery = cobroQuery;
         }
 
-        public async Task<ReciboResponse> RegistrarRecibo(RegistrarReciboRequest request, CancellationToken ct = default)
+        public async Task<ReciboResponse> RegistrarRecibo(
+    RegistrarReciboRequest request,
+    CancellationToken ct = default)
         {
+            if (request == null)
+                throw new ExceptionBadRequest("Debe ingresar datos");
+
+            if (request.IdCobro <= 0)
+                throw new ExceptionBadRequest("Id de cobro inválido");
+
+            var cobro = await _cobroQuery.ConsultarCobro(request.IdCobro, ct);
+
+            if (cobro == null)
+                throw new ExceptionNotFound("Cobro no encontrado");
+
+            // =========================
+            // VALIDACIÓN DE NEGOCIO
+            // =========================
+            if (!cobro.IdReserva.HasValue)
+                throw new ExceptionBadRequest(
+                    "El cobro no tiene una reserva asociada y no se puede generar el recibo"
+                );
+
+            // =========================
+            // CREAR RECIBO
+            // =========================
             var recibo = new Recibo
             {
-                IdCobro = request.IdCobro,
-                IdReserva = request.IdReserva,
-                MontoTotal = request.MontoTotal,
-                FechaEmision = request.FechaEmision
+                IdCobro = cobro.IdCobro,
+                IdReserva = cobro.IdReserva.Value,
+                MontoTotal = cobro.MontoTotal,
+                FechaEmision = DateTime.Now
             };
 
             var resultado = await _command.RegistrarRecibo(recibo, ct);
 
+            // =========================
+            // RESPONSE
+            // =========================
             return new ReciboResponse
             {
                 Id_Recibo = resultado.IdRecibo,
@@ -71,15 +102,17 @@ namespace Application.UseCases.Services
             var recibo = await _query.ConsultarRecibo(idRecibo, ct);
             if (recibo == null)
             {
-                throw new Exception($"No se encontró el recibo con ID {idRecibo}");
+                throw new ExceptionNotFound($"No se encontró el recibo con ID {idRecibo}");
             }
+            var cobro = await _cobroQuery.ConsultarCobro(recibo.IdCobro);
+
 
             return new ReciboResponse
             {
                 Id_Recibo = recibo.IdRecibo,
                 Id_Cobro = recibo.IdCobro,
-                Id_Reserva = recibo.IdReserva,
-                MontoTotal = recibo.MontoTotal,
+                Id_Reserva = (int)cobro.IdReserva,
+                MontoTotal = cobro.MontoTotal,
                 FechaEmision = recibo.FechaEmision
             };
         }
@@ -98,7 +131,7 @@ namespace Application.UseCases.Services
                 Id_Recibo = recibo.IdRecibo,
                 Id_Cobro = recibo.IdCobro,
                 Id_Reserva = recibo.IdReserva,
-                MontoTotal = recibo.MontoTotal,
+                MontoTotal =(double) recibo.MontoTotal,
                 FechaEmision = recibo.FechaEmision
             };
         }
